@@ -1,11 +1,29 @@
-'user client'
-import axios from  'axios';
-export const getDoctor = async(doctor : CreateDoctorParams )=>{
+'use client'
+import axios from 'axios';
+import Cookies from 'js-cookie';
+export const getDoctor = async (doctor: CreateDoctorParams) => {
     try {
-        // const doctor = await axios.get(env.END_POINT,)
-        console.log(doctor);
-        
+        const response = await axios.post('http://localhost:5228/api/doctor',
+            doctor,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }
+        );
+        Cookies.set('user', JSON.stringify(response.data), { expires: 7 }); 
+        return response.data;
     } catch (error) {
-        console.log(error)
+        // Xử lý lỗi
+        if (axios.isAxiosError(error)) {
+            console.error('Error message:', error.message);
+            if (error.response) {
+                // Có phản hồi từ server
+                console.error('Error response data:', error.response.data);
+            }
+        } else {
+            // Lỗi không phải từ axios
+            console.error('Unexpected error:', error);
+        }
     }
-}
+};

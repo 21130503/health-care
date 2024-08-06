@@ -23,10 +23,13 @@ import { useRouter } from 'next/navigation';
 import { Button } from './button';
 import SubmitButton from './forms/SubmitButton';
 import { getDoctor } from '@/lib/actions/doctor';
+import { ToastAction } from './toast';
+import { useToast } from './use-toast';
 const DoctorModal =  () => {
     const [open, setOpen] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
+    const { toast } = useToast()
     const closeModal = () => {
         setOpen(false);
         router.push("/");
@@ -42,6 +45,18 @@ const DoctorModal =  () => {
       // 2. Define a submit handler.
       async function onSubmit(values: z.infer<typeof DoctorFormValidation>) {
         const doctor = await getDoctor(values)
+        if(doctor) {
+          router.push('/doctor')
+        }
+        else{
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: "There was a problem with your request.",
+            action: <ToastAction altText="Try again">Try again</ToastAction>,
+          })
+        }
+        
       }
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
