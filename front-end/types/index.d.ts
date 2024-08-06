@@ -54,3 +54,7 @@ declare type SearchParamProps = {
     appointment: Appointment;
     type: string;
   };
+  declare type CreateDoctorParams = {
+    email: string;
+    password: string;
+  }

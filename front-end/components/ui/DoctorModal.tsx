@@ -22,7 +22,8 @@ import CustomFormField from './CustomFormField';
 import { useRouter } from 'next/navigation';
 import { Button } from './button';
 import SubmitButton from './forms/SubmitButton';
-const DoctorModal = () => {
+import { getDoctor } from '@/lib/actions/doctor';
+const DoctorModal =  () => {
     const [open, setOpen] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
@@ -39,8 +40,8 @@ const DoctorModal = () => {
       })
      
       // 2. Define a submit handler.
-      function onSubmit(values: z.infer<typeof DoctorFormValidation>) {
-        console.log(values)
+      async function onSubmit(values: z.infer<typeof DoctorFormValidation>) {
+        const doctor = await getDoctor(values)
       }
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
