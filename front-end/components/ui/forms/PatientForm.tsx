@@ -29,7 +29,8 @@ export enum FormFieldType {
     CHECKBOX='checkbox',
     DATE_PICKER = 'datePicker',
     SELECT= 'select',
-    SKELETON = 'skeleton'
+    SKELETON = 'skeleton',
+    PASSWORD ='password' 
 }
  
 const PatientForm = ()=> {

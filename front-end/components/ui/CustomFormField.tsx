@@ -120,7 +120,7 @@ const RenderField = ({field, props}: {field: any, props: CustomProps})=>{
                     />
                 </FormControl>
             )
-            case FormFieldType.SELECT:
+        case FormFieldType.SELECT:
                 return (
                   <FormControl>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -148,6 +148,29 @@ const RenderField = ({field, props}: {field: any, props: CustomProps})=>{
             </div>
         </FormControl>
            )
+        case FormFieldType.PASSWORD :
+            return    (  
+            <div className='flex rounded-md border-x-dark-500 bg-dark-400'>
+                {iconSrc &&(
+                    <Image
+                        src= {iconSrc}
+                        height = {24}
+                        width= {24}
+                        alt = {iconAlt || 'icon'}
+                        className='ml-2'
+                    />
+                )
+                }
+                <FormControl>
+                    <Input
+                        type='password'
+                        placeholder={placeholder}
+                        {...field}
+                        className='shad-input border-0'
+                    />
+                </FormControl>
+              </div>
+    )
         default:
             break;
     }

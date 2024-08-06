@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import DoctorModal from "@/components/ui/DoctorModal";
 import PatientForm from "@/components/ui/forms/PatientForm";
 import { PasskeyModal } from "@/components/ui/PasskeyModal";
 import Image from "next/image";
@@ -6,9 +7,11 @@ import Link from "next/link";
 
 export default function Home({searchParams}: SearchParamProps) {
   const isAdmin = searchParams?.admin === "true";
+  const isDoctor = searchParams?.doctor === "true";
   return (
     <div className="flex h-screen max-h-screen">
        {isAdmin && <PasskeyModal />}
+       {isDoctor && <DoctorModal />}
 
       <section className="remove-scrollbar container my-auto">
         <div className="sub-container max-w-[496px]">
@@ -25,7 +28,10 @@ export default function Home({searchParams}: SearchParamProps) {
                 <p className="justify-items-end text-dark-600 xl:text-left">
                 © 2024 CarePulse
                 </p>
-                <Link className="text-green-500" href={"/?admin=true"}>Admin</Link>
+                <div>
+                  <Link className="text-green-500 mr-5" href={"/?doctor=true"}>Doctor</Link>
+                  <Link className="text-green-500" href={"/?admin=true"}>Admin</Link>
+                </div>
             </div>
 
         </div>
