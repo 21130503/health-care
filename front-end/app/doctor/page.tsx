@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import Cookies from 'js-cookie';
 import Image from 'next/image';
+import SettingsDialog from '@/components/ui/SettingsDialog';
 const DoctorPage = () => {
     const router = useRouter()
     const [isOpenSettings,setIsOpenSettings] = useState(false)
@@ -37,6 +38,7 @@ const DoctorPage = () => {
                             width={24}
                             alt="settings"
                             className='cursor-pointer'
+                            onClick={()=>setIsOpenSettings(true)}
                             />
                         </span>
                     </div>
@@ -48,6 +50,7 @@ const DoctorPage = () => {
             </div>
         </header>
         <section></section>
+        {isOpenSettings && <SettingsDialog/>}
     </div>
   )
 }
