@@ -58,3 +58,14 @@ declare type SearchParamProps = {
     email: string;
     password: string;
   }
+  declare type EditDoctorParams = {
+    userId: number
+    avatar: File[]
+    email: string
+    gender: number,
+    name: string,
+    phone: string,
+    dateOfBirth: string,
+    department: string,
+    password: string,
+  }

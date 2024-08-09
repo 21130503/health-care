@@ -27,3 +27,22 @@ export const getDoctor = async (doctor: CreateDoctorParams) => {
         }
     }
 };
+export const updateDoctor = async (editDoctor: FormData)=>{
+    try {
+        const response = await axios.post('http://localhost:5228/api/editdoctor',
+            editDoctor,
+            
+        );
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('Error message:', error.message);
+            if (error.response) {
+                // Có phản hồi từ server
+                console.error('Error response data:', error.response.data);
+            }
+        } else {
+            // Lỗi không phải từ axios
+            console.error('Unexpected error:', error);
+        }
+    }
+}

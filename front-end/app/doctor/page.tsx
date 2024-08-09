@@ -4,9 +4,11 @@ import React, { useEffect, useState } from 'react'
 import Cookies from 'js-cookie';
 import Image from 'next/image';
 import SettingsDialog from '@/components/ui/SettingsDialog';
+import EditDoctorDialog from '@/components/ui/EditDoctorDialog';
 const DoctorPage = () => {
     const router = useRouter()
     const [isOpenSettings,setIsOpenSettings] = useState(false)
+    const [isOpenEdit,setIsOpenEdit] = useState(false)
     let currentDoctor;
         const user = Cookies.get('user')
         if (user) {
@@ -30,7 +32,7 @@ const DoctorPage = () => {
                 <div className='top flex items-center justify-between'>
                     <h1 className='text-2xl'>{currentDoctor.name}</h1>
                     <div className='flex gap-10 items-center'>
-                        <span className='py-2 px-10 bg-green-500 rounded-sm'>Edit Profile</span>
+                        <span onClick={()=>setIsOpenEdit(true)} className='py-2 px-10 bg-green-500 rounded-sm'>Edit Profile</span>
                         <span>
                             <Image
                             src='/assets/icons/settings.svg'
@@ -51,6 +53,7 @@ const DoctorPage = () => {
         </header>
         <section></section>
         {isOpenSettings && <SettingsDialog/>}
+        {isOpenEdit && <EditDoctorDialog doctor={currentDoctor}/>}
     </div>
   )
 }
