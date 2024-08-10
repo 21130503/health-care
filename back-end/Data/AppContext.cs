@@ -8,6 +8,6 @@ namespace MyWebApi.Data
 
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
-        public DbSet<EditDoctor> EditDoctors { get; set; }
+        public DbSet<EditDoctor> TemporaryDoctors { get; set; }
     }
 }

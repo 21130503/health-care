@@ -8,5 +8,5 @@ public class Doctor
     public int gender { get; set; }
     public string avatar { get; set; }
     public string department { get; set; }
-    public string dateOfBirth { get; set; }
+    public DateTime dateOfBirth { get; set; }
 }

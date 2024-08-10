@@ -15,7 +15,7 @@ public class EditDoctorRequest
     public string Name { get; set; }
     public string Phone { get; set; }
     public int Gender { get; set; }
-    public IFormFile Avatar { get; set; } // Mảng chứa các tệp hình ảnh
+    public IFormFile Avatar { get; set; }
     public string Department { get; set; }
     public DateTime DateOfBirth { get; set; }
 }
