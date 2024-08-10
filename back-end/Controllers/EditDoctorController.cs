@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using MyWebApi.Data;
 
@@ -8,9 +9,11 @@ using MyWebApi.Data;
 public class EditDoctorController : ControllerBase
 {
     private readonly AppDbContext _context;
-    public EditDoctorController(AppDbContext context)
+    private readonly IHubContext<NotificationHub> _hubContext;
+    public EditDoctorController(AppDbContext context, IHubContext<NotificationHub> hubContext)
     {
         _context = context;
+        _hubContext = hubContext;
     }
     [HttpGet]
     public async Task<ActionResult<Doctor>> getDoctorById(int id)
@@ -48,6 +51,10 @@ public class EditDoctorController : ControllerBase
         var editDoctor = await _context.SaveChangesAsync();
         if (editDoctor != null)
         {
+            // Gửi thông báo cho admin
+            await _hubContext.Clients.All.SendAsync("ReceiveNotification",
+                "Có yêu cầu mới cần duyệt.");
+
             Console.WriteLine("EditDoctor success");
             return Ok("Doctor edited successfully");
         }

@@ -12,6 +12,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new Version(8, 0, 21))));
 
+//  config the signalIR
+builder.Services.AddSignalR();
 // Crors
 builder.Services.AddCors(options =>
 {
@@ -44,6 +46,13 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.UseCors("AllowSpecificOrigin"); // Sử dụng chính sách CORS
+app.UseRouting(); // Bắt buộc phải sử dụng trước khi dùng Endpoints
+// Cấu hình các endpoints
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers(); // Map các controller
+    endpoints.MapHub<NotificationHub>("/notificationHub"); // Map SignalR Hub
+});
 
 app.MapControllers();
 
