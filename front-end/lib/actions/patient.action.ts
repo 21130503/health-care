@@ -28,12 +28,28 @@ export const createUser = async (user: CreateUserParams) => {
         }
     }
 }
-export const getUser = async (userId: string) =>{
+export const getUser = async (userLogin: LoginUserParams) =>{
     try {
-        const user = await users.get(userId)
-        return parseStringify(user)
-    } catch (error:any) {
-        console.log(error)
+        const {data} = await axios.post('http://localhost:5228/auth/login',
+            userLogin,{
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }
+            
+        );
+        return data
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('Error message:', error.message);
+            if (error.response) {
+                // Có phản hồi từ server
+                console.error('Error response data:', error.response.data);
+            }
+        } else {
+            // Lỗi không phải từ axios
+            console.error('Unexpected error:', error);
+        }
     }
 }
 export const registerPatient = async ({identificationDocument, ...patient}: RegisterUserParams) => {

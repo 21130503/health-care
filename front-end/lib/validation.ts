@@ -10,6 +10,13 @@ export const UserFormValidation = z.object({
     .string()
     .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
 });
+export const LoginFormValidation = z.object({
+  email: z.string().email("Invalid email address"),
+  phone: z
+    .string()
+    .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
+
+})
 export const DoctorFormValidation = z.object({
   email: z.string().email("Invalid email address"),
   password: z

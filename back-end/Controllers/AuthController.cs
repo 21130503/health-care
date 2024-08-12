@@ -16,7 +16,11 @@ public class AuthController : ControllerBase
         Console.WriteLine(loginRequest.email);
         if (loginRequest == null || string.IsNullOrEmpty(loginRequest.email) || string.IsNullOrEmpty(loginRequest.phone))
         {
-            return BadRequest("Invalid login request");
+            return BadRequest(new
+            {
+                status = 500,
+                message = "Invalid login request"
+            });
         }
         var user = await _context.Users
         .FirstOrDefaultAsync(d => d.Email == loginRequest.email && d.Phone == loginRequest.phone);
@@ -25,7 +29,11 @@ public class AuthController : ControllerBase
             return NotFound("Doctor not found or invalid credentials");
         }
 
-        return Ok(user);
+        return Ok(new
+        {
+            status = 200,
+            user = user
+        });
     }
     [HttpPost("register")]
     public async Task<ActionResult<string>> AuthRegister([FromBody] AuthRegister registerRequest)

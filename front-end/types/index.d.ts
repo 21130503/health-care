@@ -13,6 +13,10 @@ declare type SearchParamProps = {
     email: string;
     phone: string;
   }
+  declare interface LoginUserParams {
+    email: string;
+    phone: string;
+  }
   declare interface User extends CreateUserParams {
     $id: string;
   }

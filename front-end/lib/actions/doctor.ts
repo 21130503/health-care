@@ -11,7 +11,7 @@ export const getDoctor = async (doctor: CreateDoctorParams) => {
                 }
             }
         );
-        Cookies.set('user', JSON.stringify(response.data), { expires: 7 }); 
+        Cookies.set('doctor', JSON.stringify(response.data), { expires: 7 }); 
         return response.data;
     } catch (error) {
         // Xử lý lỗi

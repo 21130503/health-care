@@ -10,11 +10,11 @@ const DoctorPage = () => {
     const [isOpenSettings,setIsOpenSettings] = useState(false)
     const [isOpenEdit,setIsOpenEdit] = useState(false)
     let currentDoctor;
-        const user = Cookies.get('user')
+        const user = Cookies.get('doctor')
         if (user) {
             currentDoctor=JSON.parse(user)
         } else {
-            router.push('/')
+            router.push('/login')
         }
     console.log(currentDoctor);
     
@@ -22,7 +22,7 @@ const DoctorPage = () => {
     <div className='container'>
         <header className='admin-header mt-6 flex'>
             <Image
-              src={currentDoctor.avatar}
+              src={currentDoctor?.avatar}
               height={1000}
               width={1000}
               alt="doctor"
@@ -30,7 +30,7 @@ const DoctorPage = () => {
             />
             <div className='information flex flex-col flex-1 ml-10 gap-3'>
                 <div className='top flex items-center justify-between'>
-                    <h1 className='text-2xl'>{currentDoctor.name}</h1>
+                    <h1 className='text-2xl'>{currentDoctor?.name}</h1>
                     <div className='flex gap-10 items-center'>
                         <span onClick={()=>setIsOpenEdit(true)} className='py-2 px-10 bg-green-500 rounded-sm'>Edit Profile</span>
                         <span>
@@ -45,7 +45,7 @@ const DoctorPage = () => {
                         </span>
                     </div>
                     </div>
-                <h1>Department: <span className='text-green-500 capitalize'>{currentDoctor.department}</span></h1>
+                <h1>Department: <span className='text-green-500 capitalize'>{currentDoctor?.department}</span></h1>
                 <div className='bottom'>
                     <h1><span className='text-green-500 mr-1'>0</span> schedule</h1>
                 </div>
