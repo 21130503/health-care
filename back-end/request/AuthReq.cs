@@ -1,4 +1,4 @@
-public class AuthRegíter
+public class AuthRegister
 {
     public string email { get; set; }
     public string phone { get; set; }

@@ -3,24 +3,29 @@ import { ID, Query } from "node-appwrite"
 import { databases, env, storage, users } from "../appwrite.config"
 import { parseStringify } from "../utils"
 import {InputFile} from 'node-appwrite/file'
+import axios from "axios";
 export const createUser = async (user: CreateUserParams) => {
     try {
-        const newUser = await users.create(ID.unique(), user.email, user.phone,undefined, user.name)
-        console.log("newUser", newUser);
-        
-        return {newUser}
-         
-    } catch (error:any) {
-        console.log("error: ", error);
-        
-        if(error && error?.code === 409) {
-            const existingUser = await users.list([
-                Query.equal("email", [user.email])
-            ])
-
-            return existingUser?.users[0]
+        const {data} = await axios.post('http://localhost:5228/auth/register',
+            user,{
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }
+            
+        );
+        return data
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('Error message:', error.message);
+            if (error.response) {
+                // Có phản hồi từ server
+                console.error('Error response data:', error.response.data);
+            }
+        } else {
+            // Lỗi không phải từ axios
+            console.error('Unexpected error:', error);
         }
-
     }
 }
 export const getUser = async (userId: string) =>{

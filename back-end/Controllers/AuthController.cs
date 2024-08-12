@@ -11,7 +11,7 @@ public class AuthController : ControllerBase
         _context = context;
     }
     [HttpPost("login")]
-    public async Task<ActionResult<Auth>> getDoctor([FromBody] AuthLogin loginRequest)
+    public async Task<ActionResult<Auth>> AuthLogin([FromBody] AuthLogin loginRequest)
     {
         Console.WriteLine(loginRequest.email);
         if (loginRequest == null || string.IsNullOrEmpty(loginRequest.email) || string.IsNullOrEmpty(loginRequest.phone))
@@ -27,6 +27,57 @@ public class AuthController : ControllerBase
 
         return Ok(user);
     }
-    // public async Task<
+    [HttpPost("register")]
+    public async Task<ActionResult<string>> AuthRegister([FromBody] AuthRegister registerRequest)
+    {
+        if (registerRequest == null || string.IsNullOrEmpty(registerRequest.email) || string.IsNullOrEmpty(registerRequest.phone) || string.IsNullOrEmpty(registerRequest.name))
+        {
+            return BadRequest("Invalid register request");
+        }
+        var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == registerRequest.email);
+        if (existingUser != null)
+        {
+            Console.WriteLine("Có user rồi");
+            return BadRequest(new
+            {
+                status = 500,
+                message = "Email address already exists",
+            });
+        }
+        Console.WriteLine("Chưa có user");
+
+        var user = new Auth
+        {
+            Email = registerRequest.email,
+            Phone = registerRequest.phone,
+            Name = registerRequest.name,
+            // Map other necessary fields
+        };
+        _context.Users.Add(user);
+        var newUser = await _context.SaveChangesAsync();
+        if (newUser > 0)
+        {
+            return Ok(new
+            {
+                status = 200,
+                message = "Register success",
+                user = new
+                {
+                    id = user.Id,
+                    name = user.Name,
+                    phone = user.Phone,
+                    email = user.Email
+                }
+            });
+        }
+        else
+        {
+            return BadRequest(new
+            {
+                status = 500,
+                message = "Register failure"
+            });
+        }
+    }
 
 }
