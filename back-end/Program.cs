@@ -22,7 +22,8 @@ builder.Services.AddCors(options =>
         {
             builder.WithOrigins("http://localhost:3000")
                    .AllowAnyHeader()
-                   .AllowAnyMethod();
+                   .AllowAnyMethod()
+                   .AllowCredentials();
         });
 });
 // Tạo thư mục
@@ -48,12 +49,12 @@ app.UseAuthorization();
 app.UseCors("AllowSpecificOrigin"); // Sử dụng chính sách CORS
 app.UseRouting(); // Bắt buộc phải sử dụng trước khi dùng Endpoints
 // Cấu hình các endpoints
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers(); // Map các controller
-    endpoints.MapHub<NotificationHub>("/notificationHub"); // Map SignalR Hub
-});
-
+// app.UseEndpoints(endpoints =>
+// {
+//     endpoints.MapControllers(); // Map các controller
+//     endpoints.MapHub<NotificationHub>("/notificationHub"); // Map SignalR Hub
+// });
+app.MapHub<NotificationHub>("/notificationHub");
 app.MapControllers();
 
 app.Run();

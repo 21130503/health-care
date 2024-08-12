@@ -1,11 +1,13 @@
+
+import { badgeVariants } from '@/components/ui/badge';
 import { StatCard } from '@/components/ui/StatCard';
 import { columns, Payment } from '@/components/ui/table/columns';
 import  {DataTable} from '@/components/ui/table/DataTable';
 import { getRecentAppointmentList } from '@/lib/actions/appointment';
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
-
+import React, { useEffect, useState } from 'react'
+import NotificationComp from '@/components/ui/Notification';
 
 
 const AdminPage = async() => {
@@ -23,7 +25,10 @@ const AdminPage = async() => {
           />
         </Link>
 
-        <p className="text-16-semibold">Admin Dashboard</p>
+        <div className='flex gap-5 items-center'>
+          <NotificationComp/>
+          <p className="text-16-semibold">Admin Dashboard</p>
+        </div>
       </header>
 
       <main className="admin-main">

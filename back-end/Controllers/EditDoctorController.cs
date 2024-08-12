@@ -52,8 +52,7 @@ public class EditDoctorController : ControllerBase
         if (editDoctor != null)
         {
             // Gửi thông báo cho admin
-            await _hubContext.Clients.All.SendAsync("ReceiveNotification",
-                "Có yêu cầu mới cần duyệt.");
+            await _hubContext.Clients.All.SendAsync("ReceiveNotification", editDoctor);
 
             Console.WriteLine("EditDoctor success");
             return Ok("Doctor edited successfully");
