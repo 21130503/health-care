@@ -79,13 +79,14 @@ const AppointmentForm = ({type, patientId,userId,appointment,setOpen}: Appointme
                 status: status as Status,
                 note: values.note,
             }
+            // @ts-ignore
             const newAppointment = await createAppointment(appointmentData)
-            // if(newAppointment){
-            //     form.reset()
-            //     router.push(
-            //         `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`
-            //       );
-            // }
+            if(newAppointment){
+                form.reset()
+                router.push(
+                    `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.appointmentId}`
+                  );
+            }
         }
         else {
           

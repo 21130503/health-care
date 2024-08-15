@@ -29,5 +29,20 @@ public class DoctorController : ControllerBase
 
         return Ok(doctor);
     }
+    [HttpGet("all")]
+    public async Task<ActionResult<IEnumerable<Doctor>>> getListDoctors()
+    {
+        return await _context.Doctors.ToListAsync();
+    }
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Doctor>> GetPatientByIdUser(int id)
+    {
+        var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.id == id);
+        if (doctor == null)
+        {
+            return NotFound("Doctor not found");
+        }
+        return doctor;
+    }
 
 }

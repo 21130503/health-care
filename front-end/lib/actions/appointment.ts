@@ -3,23 +3,33 @@ import { databases, env, messaging } from "../appwrite.config"
 import { formatDateTime, parseStringify } from "../utils"
 import { Appointment } from "@/types/appwrite.types"
 import { revalidatePath } from "next/cache"
+import axios from "axios"
 
 export const createAppointment = async (appointment: CreateAppointmentParams)=>{
-    try {
-        // const newAppointment = await databases.createDocument(
-        //     env.DATABASE_ID,
-        //     env.APP_COLLECTION_ID,
-        //     ID.unique(),
-        //     appointment
-        // )
-        // return parseStringify(newAppointment)
-        console.log("HELU");
-        console.log("appointment", appointment);
+  try {
+    const response = await axios.post('http://localhost:5228/appointment/add',
+        appointment,
+        {
+          headers: {
+                'Content-Type': 'application/json',
+          }
+        }
         
+      );
+      // console.log(response.data);
+      return response.data
+} catch (error) {
+    if (axios.isAxiosError(error)) {
+        console.error('Error message:', error.message);
+        if (error.response) {
+            // Có phản hồi từ server
+            console.error('Error response data:', error.response.data);
+        }
+    } else {
+        // Lỗi không phải từ axios
+        console.error('Unexpected error:', error);
     }
-    catch(error:any){
-        console.log(error)
-    }
+}
 }
 export const getAppointment = async (appointmentId:string)=>{
     try {
