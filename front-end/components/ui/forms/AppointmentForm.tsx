@@ -23,18 +23,19 @@ import { useRouter } from "next/navigation"
 import { createUser } from "@/lib/actions/patient.action"
 import { FormFieldType } from "./PatientForm"
 import { Doctors } from "@/constants"
-import Image from "next/image"
 import { SelectItem } from "../select"
 import { createAppointment, updateAppointment } from "@/lib/actions/appointment"
 import { Appointment } from "@/types/appwrite.types"
+import Image from "next/image"
 interface AppointmentProps {
     userId : string,
     patientId : string,
     type: 'create' | 'cancel' | 'schedule',
     appointment?:Appointment,
     setOpen?: Dispatch<SetStateAction<boolean>>;
+    doctors: Array<any>;
 }
-const AppointmentForm = ({type, patientId,userId,appointment,setOpen}: AppointmentProps)=> {
+const AppointmentForm = ({type, patientId,userId,appointment,setOpen,doctors}: AppointmentProps)=> {
   const router = useRouter()
   const [isLoading,setIsLoading] =useState(false)
   console.log(appointment);
@@ -147,11 +148,11 @@ const AppointmentForm = ({type, patientId,userId,appointment,setOpen}: Appointme
                     label="Doctor"
                     placeholder="Select a doctor"
                 >
-                    {Doctors.map((doctor, i) => (
+                    {doctors.map((doctor, i) => (
                     <SelectItem key={doctor.name + i} value={doctor.id.toString()}>
                         <div className="flex cursor-pointer items-center gap-2">
                         <Image
-                            src={doctor.image}
+                            src={doctor.avatar}
                             width={32}
                             height={32}
                             alt="doctor"

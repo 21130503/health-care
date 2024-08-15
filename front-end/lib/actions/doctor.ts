@@ -70,7 +70,7 @@ export const getAllDoctor = async () => {
         }
     }
 }
-export const getDoctorByID = async (id : string)=> {
+export const  getDoctorById = async (id : number)=> {
     try {
         const response = await axios.get(`http://localhost:5228/api/doctor/${id}`,
             {
@@ -92,4 +92,5 @@ export const getDoctorByID = async (id : string)=> {
             console.error('Unexpected error:', error);
         }
     }
+    
 }
