@@ -162,3 +162,30 @@ export const getAllAppointmentByUser = async (idUser: string)=>{
   }
 
 }
+// Cancel
+export const cancelAppointment = async (appointment: CancelAppointmentParams)=>{
+  try {
+    const response = await axios.put('http://localhost:5228/appointment/cancel',
+        appointment,
+        {
+          headers: {
+                'Content-Type': 'application/json',
+          }
+        }
+        
+      );
+      console.log( "P/H : ", response.data);
+      return response.data
+} catch (error) {
+    if (axios.isAxiosError(error)) {
+        console.error('Error message:', error.message);
+        if (error.response) {
+            // Có phản hồi từ server
+            console.error('Error response data:', error.response.data);
+        }
+    } else {
+        // Lỗi không phải từ axios
+        console.error('Unexpected error:', error);
+    }
+}
+}

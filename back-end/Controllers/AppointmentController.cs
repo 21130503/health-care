@@ -91,4 +91,25 @@ public class AppointmentController : ControllerBase
 
         return Ok(appointments);
     }
+    [HttpPut("cancel")]
+    public async Task<ActionResult<Appointment>> cancelAppointment(CancelAppointmentRequest cancelAppointmentRequest)
+    {
+        // Tìm cuộc hẹn dựa trên AppointmentId
+        var appointment = await _context.Appointments.FindAsync(cancelAppointmentRequest.AppointmentId);
+
+        if (appointment == null)
+        {
+            return NotFound($"Appointment with ID {cancelAppointmentRequest.AppointmentId} not found.");
+        }
+
+        // Cập nhật các trường theo yêu cầu
+        appointment.Reason = cancelAppointmentRequest.Reason;
+        appointment.Status = cancelAppointmentRequest.Status;
+
+        // Lưu thay đổi vào cơ sở dữ liệu
+        await _context.SaveChangesAsync();
+
+        return StatusCode(200, "Appointment updated successfully.");
+    }
+
 }

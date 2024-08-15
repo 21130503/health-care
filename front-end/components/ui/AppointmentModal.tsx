@@ -20,12 +20,12 @@ import {
 export const AppointmentModal = ({
   patientId,
   userId,
-  appointment,
+  appointmentId,
   type,
 }: {
   patientId: string;
   userId: string;
-  appointment?: Appointment;
+  appointmentId: number;
   type: "schedule" | "cancel";
   title: string;
   description: string;
@@ -54,7 +54,7 @@ export const AppointmentModal = ({
           userId={userId}
           patientId={patientId}
           type={type}
-          appointment={appointment}
+          appointmentId={appointmentId}
           setOpen={setOpen}
         />
       </DialogContent>

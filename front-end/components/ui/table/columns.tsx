@@ -182,7 +182,7 @@ export const columnsAppointment: ColumnDef<AppointmentForDataTable>[] = [
           <AppointmentModal
             patientId={appointment.patientId}
             userId={appointment.userId}
-            appointment={appointment}
+            appointmentId={appointment.appointmentId}
             type="schedule"
             title="Schedule Appointment"
             description="Please confirm the following details to schedule."
@@ -190,7 +190,7 @@ export const columnsAppointment: ColumnDef<AppointmentForDataTable>[] = [
           <AppointmentModal
             patientId={appointment.patienTiid}
             userId={appointment.userId}
-            appointment={appointment}
+            appointmentId={appointment.appointmentId}
             type="cancel"
             title="Cancel Appointment"
             description="Are you sure you want to cancel your appointment?"

@@ -24,21 +24,21 @@ import { createUser } from "@/lib/actions/patient.action"
 import { FormFieldType } from "./PatientForm"
 import { Doctors } from "@/constants"
 import { SelectItem } from "../select"
-import { createAppointment, updateAppointment } from "@/lib/actions/appointment"
+import { cancelAppointment, createAppointment, updateAppointment } from "@/lib/actions/appointment"
 import { Appointment } from "@/types/appwrite.types"
 import Image from "next/image"
 interface AppointmentProps {
     userId : string,
     patientId : string,
     type: 'create' | 'cancel' | 'schedule',
-    appointment?:Appointment,
+    appointmentId?:number,
     setOpen?: Dispatch<SetStateAction<boolean>>;
     doctors: Array<any>;
 }
-const AppointmentForm = ({type, patientId,userId,appointment,setOpen,doctors}: AppointmentProps)=> {
+const AppointmentForm = ({type, patientId,userId,appointmentId,setOpen,doctors}: AppointmentProps)=> {
   const router = useRouter()
   const [isLoading,setIsLoading] =useState(false)
-  console.log(appointment);
+  // console.log(appointment);
   
   // 1. Define your form.
   const AppointFormValidation = getAppointmentSchema(type)
@@ -89,7 +89,8 @@ const AppointmentForm = ({type, patientId,userId,appointment,setOpen,doctors}: A
                   );
             }
         }
-        else {
+
+        else if(type === 'schedule') {
           
           const appointmentToUpdate = {
             userId,
@@ -107,6 +108,20 @@ const AppointmentForm = ({type, patientId,userId,appointment,setOpen,doctors}: A
           const updatedAppointment = await updateAppointment(appointmentToUpdate);
           
           if (updatedAppointment) {
+            setOpen && setOpen(false);
+            form.reset();
+          }
+        }
+        else if(type === 'cancel'){
+          const appointmentToUpdate = {
+            status,
+            appointmentId,
+            reason : values.cancellationReason
+          };
+          console.log("Reson :", appointmentToUpdate);
+          // @ts-ignore
+          const update = await cancelAppointment(appointmentToUpdate)
+          if (update) {
             setOpen && setOpen(false);
             form.reset();
           }
