@@ -1,11 +1,15 @@
+"use client"
 import RegisterForm from '@/components/ui/forms/RegisterForm'
-import { getUser } from '@/lib/actions/patient.action'
+
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { use } from 'react'
+import Cookies from 'js-cookie'
+import React, { use, useEffect, useState } from 'react'
+import { getUser } from '@/lib/actions/user.action'
 
-const Register =  async({params: {userId}} : SearchParamProps) => {
-    const user = await getUser(userId)
+const Register =  ({params: {userId}} : SearchParamProps) => {
+  const user =  getUser()
+  
   return (
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container ">

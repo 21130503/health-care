@@ -38,7 +38,7 @@ const Service = ({userId} : ServiceProps) => {
                             alt={item.name}
                             className=''
                             />
-                        <Link href={item.link} className='text-white capitalize'>
+                        <Link href={item.link} className='text-white capitalize mt-2'>
                             {item.name}
                         </Link>
                     </div>

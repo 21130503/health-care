@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class PatientController : ControllerBase
 {
@@ -22,25 +22,84 @@ public class PatientController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<string>> GetPatient(int id)
+    public async Task<ActionResult<Patient>> GetPatientByIdUser(int id)
     {
-        var patient = await _context.Patients.FindAsync(id);
+        if (id > 0)
+        {
+            Console.WriteLine("Getting patient by user id: " + id.ToString());
+        }
+        else
+        {
+            Console.WriteLine("Invalid id: " + id.ToString());
+        }
+
+        var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Id == id);
 
         if (patient == null)
         {
             return NotFound();
         }
 
-        return "hello";
+        return patient;
     }
 
-    [HttpPost]
-    public async Task<ActionResult<Patient>> PostPatient(Patient patient)
+    [HttpPost("add")]
+    public async Task<ActionResult<Patient>> PostPatient([FromForm] AddPatient addPatient)
     {
-        _context.Patients.Add(patient);
-        await _context.SaveChangesAsync();
+        Console.WriteLine("Creating ", addPatient.address);
+        var imagesPath = "";
+        if (addPatient.identificationDocument != null)
+        {
+            imagesPath = Path.Combine(Directory.GetCurrentDirectory(), "images");
+            var filePath = Path.Combine(imagesPath, addPatient.identificationDocument.FileName);
 
-        return CreatedAtAction("GetProduct", new { id = patient.Id }, patient);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await addPatient.identificationDocument.CopyToAsync(stream);
+            }
+        }
+        var patient = new Patient
+        {
+            Email = addPatient.email,
+            Phone = addPatient.phone,
+            UserId = addPatient.userId,
+            Name = addPatient.name,
+            privacyConsent = addPatient.privacyConsent,
+            Gender = addPatient.gender,
+            BirthDate = addPatient.birthDate,
+            Address = addPatient.address,
+            Occupation = addPatient.occupation,
+            EmergencyContactName = addPatient.emergencyContactName,
+            EmergencyContactNumber = addPatient.emergencyContactNumber,
+            InsuranceProvider = addPatient.insuranceProvider,
+            InsurancePolicyNumber = addPatient.insurancePolicyNumber,
+            allergies = addPatient.allergies,
+            currentMedication = addPatient.currentMedication,
+            familyMedicalHistory = addPatient.familyMedicalHistory,
+            pastMedicalHistory = addPatient.pastMedicalHistory,
+            identificationType = addPatient.identificationType,
+            identificationDocument = imagesPath,
+            identificationNumber = addPatient.identificationNumber,
+            PrimaryPhysician = addPatient.primaryPhysician,
+            treatmentConsent = addPatient.treatmentConsent,
+            disclosureConsent = addPatient.disclosureConsent,
+        };
+        _context.Patients.Add(patient);
+        var res = await _context.SaveChangesAsync();
+
+        if (res > 0)
+        {
+            return Ok(new
+            {
+                status = 200,
+                message = "Patient added successfully",
+                idPatient = patient.Id
+            });
+        }
+        else
+        {
+            return StatusCode(500, "Error adding patient");
+        }
     }
 
     [HttpPut("{id}")]

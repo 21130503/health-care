@@ -6,8 +6,8 @@ import {useDropzone} from 'react-dropzone'
 
 type FileUploadProps ={
   files: File[] | undefined,
-  height: number,
-  width: number,
+  height?: number,
+  width?: number,
   onChange: (files: File[]) => void
 }
 export const UploadFile = ({height,width,files, onChange}:FileUploadProps)=> {

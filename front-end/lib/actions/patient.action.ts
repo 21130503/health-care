@@ -52,48 +52,36 @@ export const getUser = async (userLogin: LoginUserParams) =>{
         }
     }
 }
-export const registerPatient = async ({identificationDocument, ...patient}: RegisterUserParams) => {
-    console.log("starting registration patient");
-    
+export const registerPatient = async (formData: FormData) => {
     try {
-        let file;
-        if(identificationDocument) {
-            const inputFile = InputFile.fromBuffer(
-                identificationDocument?.get('blobFile') as Blob,
-                identificationDocument?.get('fileName') as string ,
-            )
-            file = await storage.createFile(env.NEXT_PUBLIC_BUCKET_ID!, ID.unique(), inputFile)
-        }
-        console.log({
-            identificationDocumentId: file?.$id || null,
-                identificationDocumentUrl: `${env.NEXT_PUBLIC_ENDPOINT}/storage/buckets/${env.NEXT_PUBLIC_BUCKET_ID}/files/
-                ${file?.$id}/view??project=${env.PROJECT_ID}`
-        });
+        const response = await axios.post('http://localhost:5228/patient/add',
+            formData,
+        ); 
+        console.log("Response: " + response.data);
         
-        const newPatient = await  databases.createDocument(
-            env.DATABASE_ID!,
-            env.PATIENT_COLLECTION_ID!,
-            ID.unique(),
-            {
-                identificationDocumentId: file?.$id || null,
-                identificationDocumentUrl: `${env.NEXT_PUBLIC_ENDPOINT}/storage/buckets/${env.NEXT_PUBLIC_BUCKET_ID}/files/
-                ${file?.$id}/view??project=${env.PROJECT_ID}`,
-                ...patient,
+        return response.data;
+    } catch (error) {
+        // Xử lý lỗi
+        if (axios.isAxiosError(error)) {
+            console.error('Error message:', error.message);
+            if (error.response) {
+                // Có phản hồi từ server
+                console.error('Error response data:', error.response.data);
             }
-        )
-        return parseStringify(newPatient)
-    }catch (error) {
-        console.log(error)
+        } else {
+            // Lỗi không phải từ axios
+            console.error('Unexpected error:', error);
+        }
     }
 }
 export const getPatient = async (userId: string)=>{
     try {
-        const patients = await databases.listDocuments(
-            env.DATABASE_ID!,
-            env.PATIENT_COLLECTION_ID!,
-            [Query.equal("userId", [userId])]
-        )
-        return parseStringify(patients.documents[0])
+        const {data} = await  axios.get(`http://localhost:5228/patient/${userId}`,{
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        return data
     } catch (error) {
         console.log("error: ", error);
         
