@@ -21,19 +21,22 @@ public class PatientController : ControllerBase
         return await _context.Patients.ToListAsync();
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Patient>> GetPatientByIdUser(int id)
+    [HttpGet("{userId}")]
+    public async Task<ActionResult<Patient>> GetPatientByIdUser(int userId)
     {
-        if (id > 0)
+        if (userId > 0)
         {
-            Console.WriteLine("Getting patient by user id: " + id.ToString());
+            Console.WriteLine("Getting patient by user id: " + userId.ToString());
         }
         else
         {
-            Console.WriteLine("Invalid id: " + id.ToString());
+            Console.WriteLine("Invalid id: " + userId.ToString());
         }
 
-        var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Id == id);
+        var patient = await _context.Patients
+                    .Where(p => p.UserId == userId)
+                    .OrderBy(p => p.Id)
+                    .LastOrDefaultAsync();
 
         if (patient == null)
         {

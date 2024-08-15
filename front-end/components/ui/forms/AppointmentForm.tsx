@@ -44,11 +44,11 @@ const AppointmentForm = ({type, patientId,userId,appointment,setOpen}: Appointme
   const form = useForm<z.infer<typeof AppointFormValidation>>({
     resolver: zodResolver(AppointFormValidation),
     defaultValues: {
-      primaryPhysician: "",
       reason: "",
       note: "",
       cancellationReason: "",
-      schedule : new Date()
+      schedule : new Date(),
+      primaryPhysicianId: "0",
     },
   })
 
@@ -69,22 +69,23 @@ const AppointmentForm = ({type, patientId,userId,appointment,setOpen}: Appointme
     }
     try {
         if(type ==='create' && patientId){
+          //  @ts-ignore
             const appointmentData = {
                 userId,
-                patient: patientId,
-                primaryPhysician: values.primaryPhysician,
+                patientId,
+                primaryPhysicianId: +values.primaryPhysicianId,
                 reason: values.reason!,
                 schedule:new Date(values.schedule),
                 status: status as Status,
                 note: values.note,
             }
             const newAppointment = await createAppointment(appointmentData)
-            if(newAppointment){
-                form.reset()
-                router.push(
-                    `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`
-                  );
-            }
+            // if(newAppointment){
+            //     form.reset()
+            //     router.push(
+            //         `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`
+            //       );
+            // }
         }
         else {
           
@@ -93,7 +94,7 @@ const AppointmentForm = ({type, patientId,userId,appointment,setOpen}: Appointme
             appointmentId: appointment?.$id!,
             appointment: {
               ...appointment,
-              primaryPhysician: values.primaryPhysician,
+              primaryPhysicianId: values.primaryPhysicianId,
               schedule: new Date(values.schedule),
               status: status as Status,
               cancellationReason: values.cancellationReason,
@@ -141,12 +142,12 @@ const AppointmentForm = ({type, patientId,userId,appointment,setOpen}: Appointme
                 <CustomFormField
                     fieldType={FormFieldType.SELECT}
                     control={form.control}
-                    name="primaryPhysician"
+                    name="primaryPhysicianId"
                     label="Doctor"
                     placeholder="Select a doctor"
                 >
                     {Doctors.map((doctor, i) => (
-                    <SelectItem key={doctor.name + i} value={doctor.name}>
+                    <SelectItem key={doctor.name + i} value={doctor.id.toString()}>
                         <div className="flex cursor-pointer items-center gap-2">
                         <Image
                             src={doctor.image}

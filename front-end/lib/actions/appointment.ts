@@ -6,13 +6,16 @@ import { revalidatePath } from "next/cache"
 
 export const createAppointment = async (appointment: CreateAppointmentParams)=>{
     try {
-        const newAppointment = await databases.createDocument(
-            env.DATABASE_ID,
-            env.APP_COLLECTION_ID,
-            ID.unique(),
-            appointment
-        )
-        return parseStringify(newAppointment)
+        // const newAppointment = await databases.createDocument(
+        //     env.DATABASE_ID,
+        //     env.APP_COLLECTION_ID,
+        //     ID.unique(),
+        //     appointment
+        // )
+        // return parseStringify(newAppointment)
+        console.log("HELU");
+        console.log("appointment", appointment);
+        
     }
     catch(error:any){
         console.log(error)
