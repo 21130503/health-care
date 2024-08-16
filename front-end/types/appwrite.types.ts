@@ -52,3 +52,8 @@ export interface AppointmentForDataTable extends Models.Document {
   doctor: string,
   avatarDoctor: string
 }
+export interface DepartmentForDataTable extends Models.Document {
+  id: number,
+  name: string,
+  doctorCount: number
+}

@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
 import DropdownMenuUser from './ui/DropMenuUser'
+import NotificationComp from './ui/Notification'
+import OptionAdmin from './ui/optionAdmin'
 const Header = () => {
     const [currentUser, setCurrentUser] = useState(undefined)
     const [openDropdown, setOpenDropdown] = useState<boolean>(false)
@@ -50,4 +52,8 @@ const Header = () => {
   )
 }
 
+
+
 export default Header
+
+

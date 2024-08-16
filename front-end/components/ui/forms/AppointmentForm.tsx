@@ -163,7 +163,7 @@ const AppointmentForm = ({type, patientId,userId,appointmentId,setOpen,doctors}:
                     label="Doctor"
                     placeholder="Select a doctor"
                 >
-                    {doctors.map((doctor, i) => (
+                    {doctors?.map((doctor, i) => (
                     <SelectItem key={doctor.name + i} value={doctor.id.toString()}>
                         <div className="flex cursor-pointer items-center gap-2">
                         <Image

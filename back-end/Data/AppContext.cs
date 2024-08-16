@@ -11,5 +11,6 @@ namespace MyWebApi.Data
         public DbSet<EditDoctor> TemporaryDoctors { get; set; }
         public DbSet<Auth> Users { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Department> Departments { get; set; }
     }
 }

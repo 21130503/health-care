@@ -7,7 +7,7 @@ import { Button } from "../button"
 import Image from "next/image"
 import { Doctors } from "@/constants"
 import { formatDateTime } from "@/lib/utils"
-import { Appointment, AppointmentForDataTable } from "@/types/appwrite.types"
+import { Appointment, AppointmentForDataTable, DepartmentForDataTable } from "@/types/appwrite.types"
 import { StatusBadge } from "../StatusBadge"
 import { AppointmentModal } from "../AppointmentModal"
 
@@ -196,6 +196,39 @@ export const columnsAppointment: ColumnDef<AppointmentForDataTable>[] = [
             description="Are you sure you want to cancel your appointment?"
           />
         </div>
+      );
+    },
+  },
+]
+export const columnsDepartment: ColumnDef<DepartmentForDataTable>[] = [
+  {
+    header: "#",
+    cell: ({ row }) => {
+      return <p className="text-center text-14-medium min-w-[200px] ">{row.index + 1}</p>;
+    },
+  },
+  {
+    accessorKey: "Department Name",
+    header: "Department Name",
+    cell: ({ row }) => {
+      const department = row.original;
+      return (
+        <p className="text-14-regular min-w-[200px] text-center">
+          { department.name}
+        </p>
+      );
+    },
+  },
+  {
+    accessorKey: "Doctor Count",
+    header: "Doctor Count",
+    cell: ({ row }) => {
+      const department = row.original;
+
+      return (
+        <p className="text-14-regular min-w-[200px] text-center">
+          { department.doctorCount || 0}
+        </p>
       );
     },
   },
