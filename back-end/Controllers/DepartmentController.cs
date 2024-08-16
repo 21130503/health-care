@@ -16,4 +16,32 @@ public class DepartmentController : ControllerBase
     {
         return await _context.Departments.ToListAsync();
     }
+    [HttpPost("add")]
+    public async Task<ActionResult<Department>> AddDepartment(DepartmentReq departmentReq)
+    {
+        var department = new Department
+        {
+            Name = departmentReq.Name
+        };
+        await _context.Departments.AddAsync(department);
+        var res = await _context.SaveChangesAsync();
+        if (res > 0)
+        {
+            return Ok(new
+            {
+                status = 200,
+                message = "Department added successfully",
+                departmentId = department.Id
+            });
+        }
+        else
+        {
+            return Ok(new
+            {
+                status = 500,
+                message = "Department failed ",
+                departmentId = department.Id
+            });
+        }
+    }
 }

@@ -17,6 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Button } from "../button"
+import { DialogAddDepartment } from "../DialogAddDepartment"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -85,7 +86,7 @@ export function DataTableDepartment<TData, TValue>({
           size="sm"
           className="bg-green-500"
         >
-            <span>ADD</span>
+          <DialogAddDepartment/>
         </Button>
         <Button
           variant="outline"
