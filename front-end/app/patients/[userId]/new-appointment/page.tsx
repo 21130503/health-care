@@ -1,12 +1,15 @@
-import { Button } from "@/components/ui/button";
+
 import AppointmentForm from "@/components/ui/forms/AppointmentForm";
-import PatientForm from "@/components/ui/forms/PatientForm";
+import { getAllDoctor } from "@/lib/actions/doctor.action";
 import { getPatient } from "@/lib/actions/patient.action";
 import Image from "next/image";
-import Link from "next/link";
 
 export default async function NewAppointment({params: {userId}}: SearchParamProps)  {
     const patient  = await getPatient(userId);
+    console.log("patient", patient.id);
+    const doctors = await getAllDoctor()
+    
+    
   return (
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container my-auto">
@@ -22,7 +25,8 @@ export default async function NewAppointment({params: {userId}}: SearchParamProp
             <AppointmentForm
                 type="create"
                 userId={userId}
-                patientId = {patient.$id}
+                patientId = {patient.id}
+                doctors={doctors}
             />
             
             <p className="justify-items-end text-dark-600 xl:text-left copyright mt-10 py-12">

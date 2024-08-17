@@ -29,7 +29,8 @@ export enum FormFieldType {
     CHECKBOX='checkbox',
     DATE_PICKER = 'datePicker',
     SELECT= 'select',
-    SKELETON = 'skeleton'
+    SKELETON = 'skeleton',
+    PASSWORD ='password' 
 }
  
 const PatientForm = ()=> {
@@ -54,11 +55,12 @@ const PatientForm = ()=> {
         phone,
         email,
       }
-      const user=  await createUser(userData)
-      console.log("user: ",user);
+      const data=  await createUser(userData)
+      console.log("data: ",data);
       
-      if(user){
-        router.push(`/patients/${user.newUser.$id}/register`)
+      if(data.status ===200){
+        // router.push(`/patients/${user.newUser.$id}/register`)
+        router.push(`/login`)
       }
       else {
         alert('Thất bại')

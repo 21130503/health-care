@@ -13,6 +13,10 @@ declare type SearchParamProps = {
     email: string;
     phone: string;
   }
+  declare interface LoginUserParams {
+    email: string;
+    phone: string;
+  }
   declare interface User extends CreateUserParams {
     $id: string;
   }
@@ -39,18 +43,37 @@ declare type SearchParamProps = {
   }
   
   declare type CreateAppointmentParams = {
-    userId: string;
-    patient: string;
-    primaryPhysician: string;
+    userId: number;
+    patientId: number;
+    primaryPhysicianId: number;
     reason: string;
     schedule: Date;
     status: Status;
     note: string | undefined;
   };
-  
+  declare type CancelAppointmentParams = {
+    appointmentId: number;
+    reason : string;
+    status : Status;
+  };
   declare type UpdateAppointmentParams = {
     appointmentId: string;
     userId: string;
     appointment: Appointment;
     type: string;
   };
+  declare type CreateDoctorParams = {
+    email: string;
+    password: string;
+  }
+  declare type EditDoctorParams = {
+    userId: number
+    avatar: File[]
+    email: string
+    gender: number,
+    name: string,
+    phone: string,
+    dateOfBirth: string,
+    department: string,
+    password: string,
+  }

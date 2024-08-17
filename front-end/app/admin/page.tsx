@@ -1,30 +1,17 @@
+
 import { StatCard } from '@/components/ui/StatCard';
 import { columns, Payment } from '@/components/ui/table/columns';
 import  {DataTable} from '@/components/ui/table/DataTable';
 import { getRecentAppointmentList } from '@/lib/actions/appointment';
-import Image from 'next/image'
-import Link from 'next/link'
-import React from 'react'
-
+import React, { useEffect, useState } from 'react'
+import { HeaderAdmin } from '@/components/headerAdmin';
 
 
 const AdminPage = async() => {
     const appointments = await getRecentAppointmentList();
   return (
     <div className="mx-auto flex max-w-7xl flex-col space-y-14">
-      <header className="admin-header">
-        <Link href="/" className="cursor-pointer">
-          <Image
-            src="/assets/icons/logo-full.svg"
-            height={32}
-            width={162}
-            alt="logo"
-            className="h-8 w-fit"
-          />
-        </Link>
-
-        <p className="text-16-semibold">Admin Dashboard</p>
-      </header>
+      <HeaderAdmin/>
 
       <main className="admin-main">
         <section className="w-full space-y-4">

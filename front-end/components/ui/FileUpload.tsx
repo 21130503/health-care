@@ -6,22 +6,25 @@ import {useDropzone} from 'react-dropzone'
 
 type FileUploadProps ={
   files: File[] | undefined,
+  height?: number,
+  width?: number,
   onChange: (files: File[]) => void
 }
-export const UploadFile = ({files, onChange}:FileUploadProps)=> {
+export const UploadFile = ({height,width,files, onChange}:FileUploadProps)=> {
   const onDrop = useCallback((acceptedFiles : File[])=> {
     // Do something with the files
     onChange(acceptedFiles)
   }, [])
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
-
+  console.log('files', files);
+  
   return (
     <div {...getRootProps()} className='file-upload'>
       <input {...getInputProps()} />
       {files && files?.length>0 ? (
         <Image src={convertFileToUrl(files[0])}
-            height={1000}
-            width={1000}
+            height={height || 1000  }
+            width={width || 1000}
             alt='uploaded image'
             className='max-h-[400px] overflow-hidden object-cover'/>
       ):<>

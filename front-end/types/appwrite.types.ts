@@ -23,14 +23,41 @@ export interface Patient extends Models.Document {
   identificationDocument: FormData | undefined;
   privacyConsent: boolean;
 }
+export interface Doctor extends Models.Document{
+  id : number,
+  name: string,
+  phone: string,
+  email: string,
+  password: string,
+  gender: string,
+  department: string,
+  avatar: string,
+  dateofbirth: Date,
 
+}
 export interface Appointment extends Models.Document {
   patient: Patient;
   schedule: Date;
   status: Status;
-  primaryPhysician: string;
+  primaryPhysician: Doctor;
   reason: string;
   note: string;
   userId: string;
   cancellationReason: string | null;
+}
+export interface AppointmentForDataTable extends Models.Document {
+  patient: string,
+  status: Status,
+  schedule: Date,
+  doctor: string,
+  avatarDoctor: string
+}
+export interface DepartmentForDataTable extends Models.Document {
+  id: number,
+  name: string,
+  doctorCount: number
+}
+export interface Department extends Models.Document {
+  id: number,
+  name: string,
 }

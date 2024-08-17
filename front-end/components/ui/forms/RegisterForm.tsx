@@ -62,52 +62,83 @@ const RegisterForm = ({ user }: { user: User }) => {
   const onSubmit = async (values: z.infer<typeof PatientFormValidation>) => {
     setIsLoading(true);
     // Store file info in form data as
-    let formData;
-    if (
-      values.identificationDocument &&
-      values.identificationDocument?.length > 0
-    ) {
-      const blobFile = new Blob([values.identificationDocument[0]], {
-        type: values.identificationDocument[0].type,
-      });
+    // if (
+    //   values.identificationDocument &&
+    //   values.identificationDocument?.length > 0
+    // ) {
+    //   const blobFile = new Blob([values.identificationDocument[0]], {
+    //     type: values.identificationDocument[0].type,
+    //   });
 
-      formData = new FormData();
-      formData.append("blobFile", blobFile);
-      formData.append("fileName", values.identificationDocument[0].name);
-    }
-    console.log("FormData", formData?.get('blobFile'));
+    //   formData = new FormData();
+    //   formData.append("blobFile", blobFile);
+    //   formData.append("fileName", values.identificationDocument[0].name);
+    // }
+    // console.log("FormData", formData?.get('blobFile'));
     
     try {
-      const patient = {
-        userId: user.$id,
-        name: values.name,
-        email: values.email,
-        phone: values.phone,
-        birthDate: new Date(values.birthDate),
-        gender: values.gender,
-        address: values.address,
-        occupation: values.occupation,
-        emergencyContactName: values.emergencyContactName,
-        emergencyContactNumber: values.emergencyContactNumber,
-        primaryPhysician: values.primaryPhysician,
-        insuranceProvider: values.insuranceProvider,
-        insurancePolicyNumber: values.insurancePolicyNumber,
-        allergies: values.allergies,
-        currentMedication: values.currentMedication,
-        familyMedicalHistory: values.familyMedicalHistory,
-        pastMedicalHistory: values.pastMedicalHistory,
-        identificationType: values.identificationType,
-        identificationNumber: values.identificationNumber,
-        identificationDocument: values.identificationDocument
-          ? formData
-          : undefined,
-        privacyConsent: values.privacyConsent,
-      };
-
-      const newPatient = await registerPatient(patient);
+      // const patient = {
+      //   userId: user.id,
+      //   name: values.name,
+      //   email: values.email,
+      //   phone: values.phone,
+      //   birthDate: new Date(values.birthDate),
+      //   gender: values.gender,
+      //   address: values.address,
+      //   occupation: values.occupation,
+      //   emergencyContactName: values.emergencyContactName,
+      //   emergencyContactNumber: values.emergencyContactNumber,
+      //   primaryPhysician: values.primaryPhysician,
+      //   insuranceProvider: values.insuranceProvider,
+      //   insurancePolicyNumber: values.insurancePolicyNumber,
+      //   allergies: values.allergies,
+      //   currentMedication: values.currentMedication,
+      //   familyMedicalHistory: values.familyMedicalHistory,
+      //   pastMedicalHistory: values.pastMedicalHistory,
+      //   identificationType: values.identificationType,
+      //   identificationNumber: values.identificationNumber,
+      //   identificationDocument: values.identificationDocument
+      //     ? formData
+      //     : undefined,
+      //   privacyConsent: values.privacyConsent,
+      // };
+      const formData = new FormData();
+      formData.append("userId", user.id.toString());
+      formData.append("name", values.name);
+      formData.append("email",values.email);
+      formData.append("phone",values.phone);
+      formData.append("birthDate", new Date(values.birthDate).toISOString());
+      formData.append("gender", values.gender);
+      formData.append("address",values.address);
+      formData.append("occupation",values.occupation );
+      formData.append("emergencyContactName",values.emergencyContactName);
+      formData.append("emergencyContactNumber",values.emergencyContactNumber );
+      formData.append("primaryPhysician",values.primaryPhysician );
+      formData.append("insuranceProvider",values.insuranceProvider );
+      formData.append("insurancePolicyNumber",values.insurancePolicyNumber );
+      formData.append("allergies", values.allergies || '');
+      formData.append("currentMedication", values.currentMedication || '');
+      formData.append("familyMedicalHistory", values.familyMedicalHistory || '');
+      formData.append("pastMedicalHistory", values.pastMedicalHistory || '');
+      formData.append("identificationType", values.identificationType || '');
+      formData.append("identificationNumber", values.identificationNumber || '');
+      formData.append("privacyConsent",values.privacyConsent.toString() );
+      formData.append("treatmentConsent",values.treatmentConsent.toString());
+      formData.append("disclosureConsent",values.disclosureConsent.toString());
+      // Append các file vào FormData
+      if (values.identificationDocument && values.identificationDocument.length > 0) {
+        // console.log("hELEE");
+        
+          values.identificationDocument.forEach((file) => {
+              formData.append('identificationDocument', file);
+          });
+      }
+      console.log("FormData", formData);
+      
+      const newPatient = await registerPatient(formData);
 
       if (newPatient) {
-        router.push(`/patients/${user.$id}/new-appointment`);
+        router.push(`/patients/${user.id}/new-appointment`);
       }
     } catch (error) {
       console.log(error);

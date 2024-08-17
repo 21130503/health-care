@@ -23,32 +23,33 @@ import { useRouter } from "next/navigation"
 import { createUser } from "@/lib/actions/patient.action"
 import { FormFieldType } from "./PatientForm"
 import { Doctors } from "@/constants"
-import Image from "next/image"
 import { SelectItem } from "../select"
-import { createAppointment, updateAppointment } from "@/lib/actions/appointment"
+import { cancelAppointment, createAppointment, updateAppointment } from "@/lib/actions/appointment"
 import { Appointment } from "@/types/appwrite.types"
+import Image from "next/image"
 interface AppointmentProps {
     userId : string,
     patientId : string,
     type: 'create' | 'cancel' | 'schedule',
-    appointment?:Appointment,
+    appointmentId?:number,
     setOpen?: Dispatch<SetStateAction<boolean>>;
+    doctors: Array<any>;
 }
-const AppointmentForm = ({type, patientId,userId,appointment,setOpen}: AppointmentProps)=> {
+const AppointmentForm = ({type, patientId,userId,appointmentId,setOpen,doctors}: AppointmentProps)=> {
   const router = useRouter()
   const [isLoading,setIsLoading] =useState(false)
-  console.log(appointment);
+  // console.log(appointment);
   
   // 1. Define your form.
   const AppointFormValidation = getAppointmentSchema(type)
   const form = useForm<z.infer<typeof AppointFormValidation>>({
     resolver: zodResolver(AppointFormValidation),
     defaultValues: {
-      primaryPhysician: "",
       reason: "",
       note: "",
       cancellationReason: "",
-      schedule : new Date()
+      schedule : new Date(),
+      primaryPhysicianId: "0",
     },
   })
 
@@ -69,31 +70,34 @@ const AppointmentForm = ({type, patientId,userId,appointment,setOpen}: Appointme
     }
     try {
         if(type ==='create' && patientId){
+          //  @ts-ignore
             const appointmentData = {
                 userId,
-                patient: patientId,
-                primaryPhysician: values.primaryPhysician,
+                patientId,
+                primaryPhysicianId: +values.primaryPhysicianId,
                 reason: values.reason!,
                 schedule:new Date(values.schedule),
                 status: status as Status,
                 note: values.note,
             }
+            // @ts-ignore
             const newAppointment = await createAppointment(appointmentData)
             if(newAppointment){
                 form.reset()
                 router.push(
-                    `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`
+                    `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.appointmentId}`
                   );
             }
         }
-        else {
+
+        else if(type === 'schedule') {
           
           const appointmentToUpdate = {
             userId,
             appointmentId: appointment?.$id!,
             appointment: {
               ...appointment,
-              primaryPhysician: values.primaryPhysician,
+              primaryPhysicianId: values.primaryPhysicianId,
               schedule: new Date(values.schedule),
               status: status as Status,
               cancellationReason: values.cancellationReason,
@@ -104,6 +108,20 @@ const AppointmentForm = ({type, patientId,userId,appointment,setOpen}: Appointme
           const updatedAppointment = await updateAppointment(appointmentToUpdate);
           
           if (updatedAppointment) {
+            setOpen && setOpen(false);
+            form.reset();
+          }
+        }
+        else if(type === 'cancel'){
+          const appointmentToUpdate = {
+            status,
+            appointmentId,
+            reason : values.cancellationReason
+          };
+          console.log("Reson :", appointmentToUpdate);
+          // @ts-ignore
+          const update = await cancelAppointment(appointmentToUpdate)
+          if (update) {
             setOpen && setOpen(false);
             form.reset();
           }
@@ -141,15 +159,15 @@ const AppointmentForm = ({type, patientId,userId,appointment,setOpen}: Appointme
                 <CustomFormField
                     fieldType={FormFieldType.SELECT}
                     control={form.control}
-                    name="primaryPhysician"
+                    name="primaryPhysicianId"
                     label="Doctor"
                     placeholder="Select a doctor"
                 >
-                    {Doctors.map((doctor, i) => (
-                    <SelectItem key={doctor.name + i} value={doctor.name}>
+                    {doctors?.map((doctor, i) => (
+                    <SelectItem key={doctor.name + i} value={doctor.id.toString()}>
                         <div className="flex cursor-pointer items-center gap-2">
                         <Image
-                            src={doctor.image}
+                            src={doctor.avatar}
                             width={32}
                             height={32}
                             alt="doctor"

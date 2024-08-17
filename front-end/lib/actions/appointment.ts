@@ -3,32 +3,56 @@ import { databases, env, messaging } from "../appwrite.config"
 import { formatDateTime, parseStringify } from "../utils"
 import { Appointment } from "@/types/appwrite.types"
 import { revalidatePath } from "next/cache"
+import axios from "axios"
 
 export const createAppointment = async (appointment: CreateAppointmentParams)=>{
-    try {
-        const newAppointment = await databases.createDocument(
-            env.DATABASE_ID,
-            env.APP_COLLECTION_ID,
-            ID.unique(),
-            appointment
-        )
-        return parseStringify(newAppointment)
-    }
-    catch(error:any){
-        console.log(error)
+  try {
+    const response = await axios.post('http://localhost:5228/appointment/add',
+        appointment,
+        {
+          headers: {
+                'Content-Type': 'application/json',
+          }
+        }
+        
+      );
+      // console.log(response.data);
+      return response.data
+} catch (error) {
+    if (axios.isAxiosError(error)) {
+        console.error('Error message:', error.message);
+        if (error.response) {
+            // Có phản hồi từ server
+            console.error('Error response data:', error.response.data);
+        }
+    } else {
+        // Lỗi không phải từ axios
+        console.error('Unexpected error:', error);
     }
 }
+}
 export const getAppointment = async (appointmentId:string)=>{
-    try {
-        const appointment = await databases.getDocument(
-            env.DATABASE_ID,
-            env.APP_COLLECTION_ID,
-            appointmentId
-        )
-        return parseStringify(appointment)
-    }catch (error) {
-        console.log(error)
+  try {
+    const response = await axios.get(`http://localhost:5228/appointment/${appointmentId}`,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }
+    );
+    return response.data;
+} catch (error) {
+    if (axios.isAxiosError(error)) {
+        console.error('Error message:', error.message);
+        if (error.response) {
+            // Có phản hồi từ server
+            console.error('Error response data:', error.response.data);
+        }
+    } else {
+        // L��i không phải từ axios
+        console.error('Unexpected error:', error);
     }
+}
 }
 export const getRecentAppointmentList = async () => {
     try {
@@ -122,3 +146,46 @@ export const updateAppointment = async ({
     console.error("An error occurred while scheduling an appointment:", error);
   }
 };
+
+
+export const getAllAppointmentByUser = async (idUser: string)=>{
+  try{
+    const response = await axios.get(`http://localhost:5228/appointment/all/${idUser}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    return response.data;
+  }
+  catch(error){
+    console.log("Error: ", error);
+  }
+
+}
+// Cancel
+export const cancelAppointment = async (appointment: CancelAppointmentParams)=>{
+  try {
+    const response = await axios.put('http://localhost:5228/appointment/cancel',
+        appointment,
+        {
+          headers: {
+                'Content-Type': 'application/json',
+          }
+        }
+        
+      );
+      console.log( "P/H : ", response.data);
+      return response.data
+} catch (error) {
+    if (axios.isAxiosError(error)) {
+        console.error('Error message:', error.message);
+        if (error.response) {
+            // Có phản hồi từ server
+            console.error('Error response data:', error.response.data);
+        }
+    } else {
+        // Lỗi không phải từ axios
+        console.error('Unexpected error:', error);
+    }
+}
+}

@@ -1,42 +1,60 @@
-import { Button } from "@/components/ui/button";
-import PatientForm from "@/components/ui/forms/PatientForm";
-import { PasskeyModal } from "@/components/ui/PasskeyModal";
-import Image from "next/image";
-import Link from "next/link";
+"use client"
+import React, { useEffect, useState } from 'react'
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import Image from 'next/image';
+import DropdownMenuUser from '@/components/ui/DropMenuUser';
+import Service from '@/components/ui/section/Service';
 
-export default function Home({searchParams}: SearchParamProps) {
-  const isAdmin = searchParams?.admin === "true";
+
+const Home = () => {
+  const [currentUser, setCurrentUser] = useState(undefined)
+  const [openDropdown, setOpenDropdown] = useState<boolean>(false)
+  const route = useRouter()
+  useEffect(()=>{
+    const user = Cookies.get('user')
+    console.log("user", user);
+    
+    if(user){
+      setCurrentUser(JSON.parse(user))
+    }
+    else{
+      route.push('/login')
+    }
+  }, [])
   return (
-    <div className="flex h-screen max-h-screen">
-       {isAdmin && <PasskeyModal />}
-
-      <section className="remove-scrollbar container my-auto">
-        <div className="sub-container max-w-[496px]">
+    <div className='mx-auto flex max-w-7xl flex-col space-y-14'>
+      <header className="admin-header">
+        <Link href="/" className="cursor-pointer">
           <Image
-            src= '/assets/icons/logo-full.svg'
-            height={1000}
-            width={1000}
-            alt="patient"
-            className="mb-12 h-10 w-fit"
-            />
+            src="/assets/icons/logo-full.svg"
+            height={32}
+            width={162}
+            alt="logo"
+            className="h-8 w-fit"
+          />
+        </Link>
 
-            <PatientForm/>
-            <div className="text-14-regular justify-between mt-20 flex">
-                <p className="justify-items-end text-dark-600 xl:text-left">
-                © 2024 CarePulse
-                </p>
-                <Link className="text-green-500" href={"/?admin=true"}>Admin</Link>
-            </div>
+        <div className='flex gap-2 items-center'>
+          <span className=' relative flex items-center 
+            justify-center h-4 w-4 border font-bold
+             cursor-pointer border-slate-600 p-4 rounded-3xl' 
+             
+             onClick={()=>setOpenDropdown(true)}
+             >
+              {currentUser?.name.charAt()}
+              {openDropdown && <DropdownMenuUser className='absolute top-12 r-10'   open={openDropdown} setOpen={setOpenDropdown} />}
 
+              </span>
+          <p className="text-16-semibold">{currentUser?.name}</p>
         </div>
-      </section>
-      <Image
-        src="/assets/images/onboarding-img.png"
-        height={1000}
-        width={1000}
-        alt="patient"
-        className="side-img max-w-[50%]"
-      />
+      </header>
+      <main className='admin-main'>
+        <Service userId={currentUser?.id} />
+      </main>
     </div>
-  );
+  )
 }
+
+export default Home

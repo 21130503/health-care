@@ -10,7 +10,64 @@ export const UserFormValidation = z.object({
     .string()
     .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
 });
+export const LoginFormValidation = z.object({
+  email: z.string().email("Invalid email address"),
+  phone: z
+    .string()
+    .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
 
+})
+export const DepartmentValidation = z.object({
+  name: z
+    .string()
+    .min(2, "Name must be at least 2 characters")
+    .max(50, "Name must be at most 50 characters"),
+})
+export const DoctorFormValidation = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z
+    .string()
+    .min(2, "Password must be at least 2 characters")
+    .max(50, "Password must be at most 50 characters"),
+})
+export const EditDoctorValidation = z.object({
+  name: z
+  .string()
+  .min(2, "Name must be at least 2 characters")
+  .max(50, "Name must be at most 50 characters"),
+  email: z.string().email("Invalid email address"),
+  department: z.string(),
+  avatar:  z.custom<File[]>().optional(), 
+  dateofbirth:z.coerce.date(),
+  password: 
+    z.string()
+    .min(2, "Password must be at least 2 characters")
+    .max(50, "Password must be at most 50 characters"),
+    phone: z
+    .string()
+    .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
+    gender: z.string(),
+    confirmPassword: z.string()
+}).refine(data => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ['confirmPassword'],
+   
+
+})
+export const DoctorAddFormValidation = z.object({
+  name: z
+  .string()
+  .min(2, "Name must be at least 2 characters")
+  .max(50, "Name must be at most 50 characters"),
+  email: z.string().email("Invalid email address"),
+  department: z.string(),
+  avatar:  z.custom<File[]>().optional(), 
+  dateOfBirth:z.coerce.date(),
+  phone: z
+  .string()
+  .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
+  gender: z.string(),
+})
 export const PatientFormValidation = z.object({
   name: z
     .string()
@@ -77,7 +134,7 @@ export const PatientFormValidation = z.object({
 });
 
 export const CreateAppointmentSchema = z.object({
-  primaryPhysician: z.string().min(2, "Select at least one doctor"),
+  primaryPhysicianId: z.string(),
   schedule: z.coerce.date(),
   reason: z
     .string()
@@ -88,7 +145,7 @@ export const CreateAppointmentSchema = z.object({
 });
 
 export const ScheduleAppointmentSchema = z.object({
-  primaryPhysician: z.string().min(2, "Select at least one doctor"),
+  primaryPhysicianId: z.string(),
   schedule: z.coerce.date(),
   reason: z.string().optional(),
   note: z.string().optional(),
@@ -96,7 +153,7 @@ export const ScheduleAppointmentSchema = z.object({
 });
 
 export const CancelAppointmentSchema = z.object({
-  primaryPhysician: z.string().min(2, "Select at least one doctor"),
+  primaryPhysicianId: z.string(),
   schedule: z.coerce.date(),
   reason: z.string().optional(),
   note: z.string().optional(),
