@@ -30,7 +30,7 @@ interface Doctor {
     email: string,
     name: string,
     phone: string,
-    gender: number,
+    gender: string,
     avatar: string,
     dateofbirth: string,
     password: string,
@@ -59,7 +59,7 @@ const EditDoctorDialog =  ({doctor}: EditDoctorDialog) => {
           department: doctor.department,
           confirmPassword: doctor.password,
           avatar: null,
-          dateofbirth: null,
+          dateofbirth: new Date(),
         },
       })
      

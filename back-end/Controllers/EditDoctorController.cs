@@ -43,7 +43,7 @@ public class EditDoctorController : ControllerBase
             phone = editDoctorRequest.Phone,
             password = editDoctorRequest.Password,
             gender = editDoctorRequest.Gender,
-            avatar = imagesPath,
+            avatar = "http://localhost:5228/images/" + editDoctorRequest.Avatar.FileName,
             department = editDoctorRequest.Department,
             dateOfBirth = editDoctorRequest.DateOfBirth
         };

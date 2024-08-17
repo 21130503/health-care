@@ -29,7 +29,7 @@ export interface Doctor extends Models.Document{
   phone: string,
   email: string,
   password: string,
-  gender: number,
+  gender: string,
   department: string,
   avatar: string,
   dateofbirth: Date,
@@ -56,4 +56,8 @@ export interface DepartmentForDataTable extends Models.Document {
   id: number,
   name: string,
   doctorCount: number
+}
+export interface Department extends Models.Document {
+  id: number,
+  name: string,
 }

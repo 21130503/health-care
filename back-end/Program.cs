@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using MyWebApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 //  config the signalIR
 builder.Services.AddSignalR();
+// phục vụ tệp tin tĩnh
 // Crors
 builder.Services.AddCors(options =>
 {
@@ -45,7 +47,12 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+// Cấu hình phục vụ các tệp tĩnh
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "images")),
+    RequestPath = "/images"
+});
 app.UseCors("AllowSpecificOrigin"); // Sử dụng chính sách CORS
 app.UseRouting(); // Bắt buộc phải sử dụng trước khi dùng Endpoints
 // Cấu hình các endpoints

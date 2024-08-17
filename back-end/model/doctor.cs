@@ -5,7 +5,7 @@ public class Doctor
     public string email { get; set; }
     public string phone { get; set; }
     public string password { get; set; }
-    public int gender { get; set; }
+    public string gender { get; set; }
     public string avatar { get; set; }
     public string department { get; set; }
     public DateTime dateOfBirth { get; set; }

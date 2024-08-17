@@ -12,6 +12,13 @@ public class DoctorController : ControllerBase
     {
         _context = context;
     }
+    private static string GenerateRandomPassword(int length)
+    {
+        const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()";
+        Random random = new Random();
+        return new string(Enumerable.Repeat(validChars, length)
+            .Select(s => s[random.Next(s.Length)]).ToArray());
+    }
     [HttpPost]
     public async Task<ActionResult<Doctor>> getDoctor([FromBody] DoctorLoginRequest loginRequest)
     {
@@ -35,7 +42,7 @@ public class DoctorController : ControllerBase
         return await _context.Doctors.ToListAsync();
     }
     [HttpGet("{id}")]
-    public async Task<ActionResult<Doctor>> GetPatientByIdUser(int id)
+    public async Task<ActionResult<Doctor>> getDoctorById(int id)
     {
         var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.id == id);
         if (doctor == null)
@@ -44,5 +51,45 @@ public class DoctorController : ControllerBase
         }
         return doctor;
     }
+    [HttpPost("add")]
+    public async Task<ActionResult<Doctor>> AddDoctor([FromForm] AddDoctorRequest addDoctorRequest)
+    {
+        if (addDoctorRequest.Avatar != null)
+        {
+            var imagesPath = Path.Combine(Directory.GetCurrentDirectory(), "images");
+            var filePath = Path.Combine(imagesPath, addDoctorRequest.Avatar.FileName);
 
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await addDoctorRequest.Avatar.CopyToAsync(stream);
+            }
+        }
+        var doctor = new Doctor
+        {
+            email = addDoctorRequest.Email,
+            phone = addDoctorRequest.Phone,
+            avatar = "http://localhost:5228/images/" + addDoctorRequest.Avatar.FileName,
+            name = addDoctorRequest.Name,
+            gender = addDoctorRequest.Gender,
+            department = addDoctorRequest.Department,
+            dateOfBirth = addDoctorRequest.DateOfBirth,
+            password = GenerateRandomPassword(10) // Generate random password
+        };
+        _context.Doctors.Add(doctor);
+        var res = await _context.SaveChangesAsync();
+        if (res > 0)
+        {
+            return Ok(new
+            {
+                status = 200,
+                message = "Doctor added successfully",
+                doctorId = doctor.id
+            });
+        }
+        else
+        {
+            return StatusCode(500, "Error adding doctor");
+        }
+
+    }
 }

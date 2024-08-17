@@ -46,13 +46,27 @@ export const EditDoctorValidation = z.object({
     phone: z
     .string()
     .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
-    gender: z.union([z.literal(0), z.literal(1)]),
+    gender: z.string(),
     confirmPassword: z.string()
 }).refine(data => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ['confirmPassword'],
    
 
+})
+export const DoctorAddFormValidation = z.object({
+  name: z
+  .string()
+  .min(2, "Name must be at least 2 characters")
+  .max(50, "Name must be at most 50 characters"),
+  email: z.string().email("Invalid email address"),
+  department: z.string(),
+  avatar:  z.custom<File[]>().optional(), 
+  dateOfBirth:z.coerce.date(),
+  phone: z
+  .string()
+  .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
+  gender: z.string(),
 })
 export const PatientFormValidation = z.object({
   name: z
