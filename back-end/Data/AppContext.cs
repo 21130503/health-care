@@ -12,5 +12,7 @@ namespace MyWebApi.Data
         public DbSet<Auth> Users { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Department> Departments { get; set; }
+        public DbSet<Topic> Topics { get; set; }
+        public DbSet<Message> Messages { get; set; }
     }
 }

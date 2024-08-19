@@ -74,3 +74,7 @@ export interface Department extends Models.Document {
   id: number,
   name: string,
 }
+export interface Topic extends Models.Document {
+  id: number,
+  name: string
+}
