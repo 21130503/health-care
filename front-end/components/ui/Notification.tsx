@@ -8,21 +8,24 @@ interface Props {
 }
 const NotificationComp = ({temporary}:Props) => {
     const [notifications, setNotifications] = useState(temporary);
+    const [conn, setConnection] = React.useState<any>(null);
     useEffect(() => {
       const connection = new signalR.HubConnectionBuilder()
-        .withUrl("http://localhost:5228/notificationHub")
-        .withAutomaticReconnect()
+        .withUrl("http://localhost:5228/notificationHub", 
+          {
+            skipNegotiation: true,
+            transport:signalR.HttpTransportType.WebSockets,
+          }
+        )
+        .configureLogging(signalR.LogLevel.Information)
         .build();
-  
-      connection.on("ReceiveNotification", (message) => {
-        console.log("Message received", message);
-        setNotifications(prevNotifications => {
-            console.log("Previous notifications length:", prevNotifications.length);
-            return [...prevNotifications, message];
-        });
-        console.log("Length of notifications", notifications);
-        
+
+        setConnection(connection);
+        connection.on("ReceiveNotification", (message) => {
+          console.log("Message received", message);
+          setNotifications(message.value);
       });
+      
   
       connection.start()
       .then(() => console.log("Connected to SignalR Hub"))

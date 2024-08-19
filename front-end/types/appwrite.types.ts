@@ -35,6 +35,19 @@ export interface Doctor extends Models.Document{
   dateofbirth: Date,
 
 }
+export interface TemporaryDoctor extends Models.Document{
+  id : number,
+  name: string,
+  phone: string,
+  email: string,
+  password: string,
+  gender: string,
+  department: string,
+  avatar: string,
+  dateOfBirth: Date,
+  userId: string
+
+}
 export interface Appointment extends Models.Document {
   patient: Patient;
   schedule: Date;
