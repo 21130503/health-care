@@ -2,10 +2,12 @@
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import * as signalR from '@microsoft/signalr';
-
-
-const NotificationComp = () => {
-    const [notifications, setNotifications] = useState<any[]>([]);
+import DropdownNotification from './DropdownNotification'
+interface Props {
+  temporary: Array<any>
+}
+const NotificationComp = ({temporary}:Props) => {
+    const [notifications, setNotifications] = useState(temporary);
     useEffect(() => {
       const connection = new signalR.HubConnectionBuilder()
         .withUrl("http://localhost:5228/notificationHub")
@@ -18,7 +20,7 @@ const NotificationComp = () => {
             console.log("Previous notifications length:", prevNotifications.length);
             return [...prevNotifications, message];
         });
-        console.log("Length of notifications", notifications.length);
+        console.log("Length of notifications", notifications);
         
       });
   
@@ -34,17 +36,9 @@ const NotificationComp = () => {
       };
     }, []);
   return (
-    <span className='relative' >
-            <Image
-              src={'/assets/icons/notification.svg'}
-              height={32}
-              width={32}
-              alt='Notifications'
-            />
-            <span className='absolute flex items-center 
-            justify-center -top-3.5 -right-3.5 h-4 w-4 border
-             border-slate-600 p-3 rounded-3xl'>{notifications.length}</span>
-          </span>
+    <p>
+      <DropdownNotification notification ={notifications}/>
+    </p>
   )
 }
 

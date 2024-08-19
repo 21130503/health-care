@@ -22,6 +22,7 @@ public class EditDoctorController : ControllerBase
     }
     [HttpPost]
     public async Task<ActionResult<string>> editDoctor([FromForm] EditDoctorRequest editDoctorRequest)
+
     {
         var doctor = await getDoctorById(editDoctorRequest.UserId);
         var imagesPath = doctor.Value.avatar;
@@ -52,7 +53,7 @@ public class EditDoctorController : ControllerBase
         if (editDoctor != null)
         {
             // Gửi thông báo cho admin
-            await _hubContext.Clients.All.SendAsync("ReceiveNotification", editDoctor);
+            await _hubContext.Clients.All.SendAsync("ReceiveNotification", getAllDoctorTemporary());
 
             Console.WriteLine("EditDoctor success");
             return Ok("Doctor edited successfully");
@@ -61,6 +62,11 @@ public class EditDoctorController : ControllerBase
         {
             return BadRequest("Failed to edit doctor");
         }
+    }
+    [HttpGet("allDoctorTemporary")]
+    public async Task<ActionResult<IEnumerable<EditDoctor>>> getAllDoctorTemporary()
+    {
+        return await _context.TemporaryDoctors.ToListAsync();
     }
 
 }

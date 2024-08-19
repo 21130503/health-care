@@ -1,8 +1,12 @@
 import Image from 'next/image'
 import NotificationComp from './ui/Notification'
 import OptionAdmin from './ui/optionAdmin'
-import Link from 'next/link'
-export const HeaderAdmin = () => {
+import Link from 'next/link';
+import { getAllDoctorTemporary } from '@/lib/actions/doctor.action';
+
+export const HeaderAdmin = async () => {
+  const allDoctorTemporary = await getAllDoctorTemporary();
+
     return (
       <header className="admin-header">
           <Link href="/" className="cursor-pointer">
@@ -16,7 +20,7 @@ export const HeaderAdmin = () => {
           </Link>
   
           <div className='flex gap-5 items-center'>
-            <NotificationComp/>
+            <NotificationComp temporary= {allDoctorTemporary}/>
             <OptionAdmin/>
           </div>
         </header>
