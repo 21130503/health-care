@@ -2,25 +2,30 @@
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import * as signalR from '@microsoft/signalr';
-
-
-const NotificationComp = () => {
-    const [notifications, setNotifications] = useState<any[]>([]);
+import DropdownNotification from './DropdownNotification'
+interface Props {
+  temporary: Array<any>
+}
+const NotificationComp = ({temporary}:Props) => {
+    const [notifications, setNotifications] = useState(temporary);
+    const [conn, setConnection] = React.useState<any>(null);
     useEffect(() => {
       const connection = new signalR.HubConnectionBuilder()
-        .withUrl("http://localhost:5228/notificationHub")
-        .withAutomaticReconnect()
+        .withUrl("http://localhost:5228/notificationHub", 
+          {
+            skipNegotiation: true,
+            transport:signalR.HttpTransportType.WebSockets,
+          }
+        )
+        .configureLogging(signalR.LogLevel.Information)
         .build();
-  
-      connection.on("ReceiveNotification", (message) => {
-        console.log("Message received", message);
-        setNotifications(prevNotifications => {
-            console.log("Previous notifications length:", prevNotifications.length);
-            return [...prevNotifications, message];
-        });
-        console.log("Length of notifications", notifications.length);
-        
+
+        setConnection(connection);
+        connection.on("ReceiveNotification", (message) => {
+          console.log("Message received", message);
+          setNotifications(message.value);
       });
+      
   
       connection.start()
       .then(() => console.log("Connected to SignalR Hub"))
@@ -34,17 +39,9 @@ const NotificationComp = () => {
       };
     }, []);
   return (
-    <span className='relative' >
-            <Image
-              src={'/assets/icons/notification.svg'}
-              height={32}
-              width={32}
-              alt='Notifications'
-            />
-            <span className='absolute flex items-center 
-            justify-center -top-3.5 -right-3.5 h-4 w-4 border
-             border-slate-600 p-3 rounded-3xl'>{notifications.length}</span>
-          </span>
+    <p>
+      <DropdownNotification notification ={notifications}/>
+    </p>
   )
 }
 

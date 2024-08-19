@@ -79,6 +79,8 @@ public class DoctorController : ControllerBase
         var res = await _context.SaveChangesAsync();
         if (res > 0)
         {
+            EmailService emailServices = new EmailService();
+            emailServices.SendEmail(doctor.email, "Welcome to Healthcare System", "Your account has been created successfully. Your password is: " + doctor.password);
             return Ok(new
             {
                 status = 200,

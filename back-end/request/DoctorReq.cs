@@ -29,3 +29,10 @@ public class AddDoctorRequest
     public string Department { get; set; }
     public DateTime DateOfBirth { get; set; }
 }
+public class TemporaryDoctorRequest
+{
+    public string type { get; set; }
+    public int id { get; set; }
+
+    public string email { get; set; }
+}
