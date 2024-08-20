@@ -6,9 +6,9 @@ import React from 'react'
 const Topic = async() => {
   const topics = await getAllTopics()
   return (
-    <div className='mx-auto flex max-w-7xl flex-col space-y-14'>
+    <div className='h-screen overflow-hidden mx-auto flex max-w-7xl flex-col space-y-14'>
       <Header/>
-      <main>
+      <main className='flex-1'>
         <Sidebar topic={topics}/>
       </main>
     </div>

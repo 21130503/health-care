@@ -79,9 +79,9 @@ export interface Topic extends Models.Document {
   name: string
 }
 export interface Message extends Models.Document {
-  id: number,
+  id?: number,
   topicId: number,
   from: number,
   message: string,
-  createdAt: Date,
+  createdAt?: Date,
 }
