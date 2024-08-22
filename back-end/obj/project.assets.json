@@ -5980,24 +5980,27 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Hp\\.nuget\\packages\\": {}
+    "C:\\Users\\rrioz\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Study\\health-care\\back-end\\.back-end.csproj",
+      "projectUniqueName": "E:\\Work_Space_VSCode\\health-care\\health-care\\back-end\\.back-end.csproj",
       "projectName": ".back-end",
-      "projectPath": "D:\\Study\\health-care\\back-end\\.back-end.csproj",
-      "packagesPath": "C:\\Users\\Hp\\.nuget\\packages\\",
-      "outputPath": "D:\\Study\\health-care\\back-end\\obj\\",
+      "projectPath": "E:\\Work_Space_VSCode\\health-care\\health-care\\back-end\\.back-end.csproj",
+      "packagesPath": "C:\\Users\\rrioz\\.nuget\\packages\\",
+      "outputPath": "E:\\Work_Space_VSCode\\health-care\\health-care\\back-end\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Hp\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\rrioz\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -6071,7 +6074,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.304/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
