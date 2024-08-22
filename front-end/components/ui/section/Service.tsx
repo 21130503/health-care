@@ -9,7 +9,8 @@ const Service = ({userId} : ServiceProps) => {
         {name: 'Make an appointment', link: `/patients/${userId}/register`, icon: 'add'},
         {name: 'Ask and answer ', link: '/topic', icon: 'question'},
         {name: 'Appointment schedule ', link: `/${userId}/records`, icon : 'schedule'},
-        {name: 'Medical examination with AI', link: '/ai', icon: 'ai'}
+        {name: 'Medical examination with AI', link: '/ai', icon: 'ai'},
+        {name: 'Search Drugs', link: '/drugs', icon: 'search'}
   
     ]
   return (

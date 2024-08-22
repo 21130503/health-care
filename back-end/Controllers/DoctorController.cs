@@ -33,6 +33,11 @@ public class DoctorController : ControllerBase
         {
             return NotFound("Doctor not found or invalid credentials");
         }
+        var department = await _context.Departments.FirstOrDefaultAsync(d => d.Id == Convert.ToInt32(doctor.department));
+        if (department != null)
+        {
+            doctor.department = department.Name;
+        }
 
         return Ok(doctor);
     }

@@ -20,7 +20,26 @@ public class PatientController : ControllerBase
     {
         return await _context.Patients.ToListAsync();
     }
+    [HttpGet("search/{id}")]
+    public async Task<ActionResult<Patient>> GetPatientById(int id)
+    {
+        Console.WriteLine("id {0}", id);
+        var patient = await _context.Patients.FindAsync(id);
 
+        if (patient == null)
+        {
+            return Ok(new
+            {
+                message = "Patient not found",
+                status = 500
+            });
+        }
+        return Ok(new
+        {
+            status = 200,
+            patient
+        });
+    }
     [HttpGet("{userId}")]
     public async Task<ActionResult<Patient>> GetPatientByIdUser(int userId)
     {
@@ -81,7 +100,7 @@ public class PatientController : ControllerBase
             familyMedicalHistory = addPatient.familyMedicalHistory,
             pastMedicalHistory = addPatient.pastMedicalHistory,
             identificationType = addPatient.identificationType,
-            identificationDocument = imagesPath,
+            identificationDocument = "http://localhost:5228/images/" + addPatient.identificationDocument.FileName,
             identificationNumber = addPatient.identificationNumber,
             PrimaryPhysician = addPatient.primaryPhysician,
             treatmentConsent = addPatient.treatmentConsent,

@@ -6,7 +6,7 @@ public class AppointmentRequest
     public string Status { get; set; }
     public string Reason { get; set; }
     public int UserId { get; set; }
-    public string? Notes { get; set; }
+    public string Note { get; set; }
 }
 public class CancelAppointmentRequest
 {

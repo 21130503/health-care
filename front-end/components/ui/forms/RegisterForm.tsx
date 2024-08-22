@@ -44,8 +44,11 @@ export enum FormFieldType {
     SELECT= 'select',
     SKELETON = 'skeleton'
 }
- 
-const RegisterForm = ({ user }: { user: User }) => {
+interface Props {
+  user: any;
+  doctor :Array<any>;
+}
+const RegisterForm = ({ user, doctor }: Props) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -56,6 +59,10 @@ const RegisterForm = ({ user }: { user: User }) => {
       name: user.name,
       email: user.email,
       phone: user.phone,
+      currentMedication: 'No',
+      allergies: 'No',
+      familyMedicalHistory: 'No',
+      pastMedicalHistory: 'No',
     },
   });
 
@@ -282,20 +289,20 @@ const RegisterForm = ({ user }: { user: User }) => {
             label="Primary care physician"
             placeholder="Select a physician"
           >
-            {Doctors.map((doctor, i) => (
-              <SelectItem key={doctor.name + i} value={doctor.name}>
-                <div className="flex cursor-pointer items-center gap-2">
-                  <Image
-                    src={doctor.image}
-                    width={32}
-                    height={32}
-                    alt="doctor"
-                    className="rounded-full border border-dark-500"
-                  />
-                  <p>{doctor.name}</p>
-                </div>
-              </SelectItem>
-            ))}
+            {doctor?.map((doctor, i) => (
+                    <SelectItem key={doctor.name + i} value={doctor.id.toString()}>
+                        <div className="flex cursor-pointer items-center gap-2">
+                        <Image
+                            src={doctor.avatar}
+                            width={32}
+                            height={32}
+                            alt="doctor"
+                            className="w-10 h-10 rounded-full border border-dark-500 object-cover"
+                        />
+                        <p>{doctor.name}</p>
+                        </div>
+                    </SelectItem>
+                    ))}
           </CustomFormField>
 
           {/* INSURANCE & POLICY NUMBER */}

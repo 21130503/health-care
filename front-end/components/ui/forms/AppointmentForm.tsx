@@ -46,7 +46,7 @@ const AppointmentForm = ({type, patientId,userId,appointmentId,setOpen,doctors}:
     resolver: zodResolver(AppointFormValidation),
     defaultValues: {
       reason: "",
-      note: "",
+      note: "no",
       cancellationReason: "",
       schedule : new Date(),
       primaryPhysicianId: "0",

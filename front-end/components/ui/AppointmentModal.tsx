@@ -23,7 +23,7 @@ export const AppointmentModal = ({
   appointmentId,
   type,
 }: {
-  patientId: string;
+  patientId: number;
   userId: string;
   appointmentId: number;
   type: "schedule" | "cancel";

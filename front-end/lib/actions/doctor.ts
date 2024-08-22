@@ -33,6 +33,7 @@ export const updateDoctor = async (editDoctor: FormData)=>{
             editDoctor,
             
         );
+        return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
             console.error('Error message:', error.message);

@@ -6,7 +6,6 @@ import Image from "next/image";
 
 export default async function NewAppointment({params: {userId}}: SearchParamProps)  {
     const patient  = await getPatient(userId);
-    console.log("patient", patient.id);
     const doctors = await getAllDoctor()
     
     

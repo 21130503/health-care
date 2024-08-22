@@ -29,6 +29,7 @@ export default function Home({searchParams}: SearchParamProps) {
                 © 2024 CarePulse
                 </p>
                 <div>
+                  <Link className="text-green-500 mr-5" href={"/login"}>Login</Link>
                   <Link className="text-green-500 mr-5" href={"/?doctor=true"}>Doctor</Link>
                   <Link className="text-green-500" href={"/?admin=true"}>Admin</Link>
                 </div>

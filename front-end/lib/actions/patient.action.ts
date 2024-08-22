@@ -87,3 +87,16 @@ export const getPatient = async (userId: string)=>{
         
     }
 }
+export const getPatientById = async (id: string)=>{
+    try {
+        const {data} = await  axios.get(`http://localhost:5228/patient/search/${id}`,{
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        return data
+    } catch (error) {
+        console.log("error: ", error);
+        
+    }
+}

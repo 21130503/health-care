@@ -5,11 +5,18 @@ import Cookies from 'js-cookie';
 import Image from 'next/image';
 import SettingsDialog from '@/components/ui/SettingsDialog';
 import EditDoctorDialog from '@/components/ui/EditDoctorDialog';
+import { getAllAppointmentForDoctor, getAllAppointmentTodayForDoctor } from '@/lib/actions/appointment';
+import { Appointment } from '@/types/appwrite.types';
+import { DataTable } from '@/components/ui/table/DataTable';
+import { columnsAppointmentDoctorPage } from '@/components/ui/table/columns';
 const DoctorPage = () => {
     const router = useRouter()
     const [isOpenSettings,setIsOpenSettings] = useState(false)
     const [isOpenEdit,setIsOpenEdit] = useState(false)
-    let currentDoctor;
+    const [appointment, setAppointment] = useState()
+    const [loading, setLoading] = useState<boolean>(true);
+    const [appointmentToday,setAppointmentToday] = useState<Array<any>>()
+    let currentDoctor:any;
         const user = Cookies.get('doctor')
         if (user) {
             currentDoctor=JSON.parse(user)
@@ -17,7 +24,18 @@ const DoctorPage = () => {
             router.push('/login')
         }
     console.log(currentDoctor);
-    
+    useEffect(() =>{
+        const loadData = async () =>{
+            setAppointment ( await getAllAppointmentForDoctor(currentDoctor.id))
+            setAppointmentToday(await getAllAppointmentTodayForDoctor(currentDoctor.id))
+        }
+        loadData()
+        const id = setTimeout(() =>{
+            setLoading(false)
+        },3000)
+        return () => clearTimeout(id)
+    },[])
+    console.log("loading ", loading);
   return (
     <div className='container'>
         <header className='admin-header mt-6 flex'>
@@ -47,11 +65,26 @@ const DoctorPage = () => {
                     </div>
                 <h1>Department: <span className='text-green-500 capitalize'>{currentDoctor?.department}</span></h1>
                 <div className='bottom'>
-                    <h1><span className='text-green-500 mr-1'>0</span> schedule</h1>
+                    <h1><span className='text-green-500 mr-1'>{appointmentToday ? appointmentToday?.length :  0}</span> schedule today</h1>
                 </div>
             </div>
         </header>
-        <section></section>
+        <section>
+            {
+            loading ? <div className='w-full py-60 flex justify-center'>
+                <Image
+                    src='/assets/gifs/loading.gif'
+                    height={80}
+                    width={80}
+                    alt='icon'
+                />
+            </div>: 
+            <div className='mt-20'>
+                <DataTable columns={columnsAppointmentDoctorPage} data={appointment} />
+            </div>
+
+            }
+        </section>
         {isOpenSettings && <SettingsDialog/>}
         {isOpenEdit && <EditDoctorDialog doctor={currentDoctor}/>}
     </div>

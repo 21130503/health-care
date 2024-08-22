@@ -7,33 +7,16 @@ import Image from "next/image"
 import { formatDateTime } from "@/lib/utils"
 import { Button } from "../button"
 import { handleTemporary } from "@/lib/actions/temporary"
- interface Props {
-  temporary : TemporaryDoctor
- }
-const TemporaryForm = ({temporary}:Props)=> {
+interface Props {
+  patient: any;
+}
+const PatientReview = ({patient}: Props)=> {
   const router = useRouter()
   const [isLoading,setIsLoading] =useState(false)
-  const [isLoadingDeny,setIsLoadingDeny] =useState(false)
-  const handelAccept  =async()=>{
-    setIsLoading(true)
-    const status  = await handleTemporary({id: temporary.id, type: "accept",email: temporary.email})
-    if(status){
-      setIsLoading(false)
-      router.push(`/admin/doctor-management`)
-    }
-  }
-  const handelDenied  =async()=>{
-    setIsLoadingDeny(true)
-    const status  = await handleTemporary({id: temporary.id, type: "denied",email: temporary.email})
-    if(status){
-      setIsLoadingDeny(false)
-      router.push(`/admin/doctor-management`)
-    }
-  }
   return (
         <div>
           <section className="mb-12 space-y-4">
-          <h1 className="header">Overview review 📑</h1>
+          <h1 className="header">Overview Patient 📑</h1>
               <p className="text-dark-700">Check the doctor's eligibility.</p>
           </section>
           <div className="flex flex-col gap-6 xl:flex-row">
@@ -50,7 +33,7 @@ const TemporaryForm = ({temporary}:Props)=> {
                 />
                 <Input
                   disabled
-                  value={temporary?.email}
+                  value={patient?.email}
                     className='shad-input border-0'
                 />
                   </div>
@@ -68,7 +51,7 @@ const TemporaryForm = ({temporary}:Props)=> {
                 />
                 <Input
                   disabled
-                  value={temporary?.name}
+                  value={patient?.name}
                     className='shad-input border-0'
                 />
                   </div>
@@ -88,7 +71,7 @@ const TemporaryForm = ({temporary}:Props)=> {
                 />
                 <Input
                   disabled
-                  value={temporary?.phone}
+                  value={patient?.phone}
                     className='shad-input border-0'
                 />
                   </div>
@@ -106,7 +89,7 @@ const TemporaryForm = ({temporary}:Props)=> {
                 />
                 <Input
                   disabled
-                  value={temporary?.gender}
+                  value={patient?.gender}
                     className='capitalize shad-input border-0 max-w-[200px]'
                 />
                   </div>
@@ -126,13 +109,13 @@ const TemporaryForm = ({temporary}:Props)=> {
                 />
                 <Input
                   disabled
-                  value={formatDateTime(temporary.dateOfBirth).dateOnly}
+                  value={formatDateTime(patient.birthDate).dateOnly}
                     className='shad-input border-0'
                 />
                   </div>
             </div>
             <div>
-              <label>Department</label>
+              <label>Address</label>
               <div className='mt-2 flex rounded-md border-x-dark-500 bg-dark-400'>
                       
                 <Image
@@ -144,45 +127,105 @@ const TemporaryForm = ({temporary}:Props)=> {
                 />
                 <Input
                   disabled
-                  value={temporary?.department}
+                  value={patient?.address}
+                    className=' capitalize shad-input border-0'
+                />
+                  </div>
+            </div>
+          </div>
+          <div className="flex flex-col gap-6 xl:flex-row mt-4">
+            <div>
+              <label>Current medications</label>
+              <div className='mt-2 flex rounded-md border-x-dark-500 bg-dark-400'>
+                      
+                <Image
+                    src= {'/assets/icons/calendar.svg'}
+                    height = {24}
+                    width= {24}
+                    alt = { 'icon'}
+                    className='ml-2'
+                />
+                <Input
+                  disabled
+                  value={patient?.currentMedication}
+                    className='shad-input border-0'
+                />
+                  </div>
+            </div>
+            <div>
+              <label>Allergies</label>
+              <div className='mt-2 flex rounded-md border-x-dark-500 bg-dark-400'>
+                      
+                <Image
+                    src= {'/assets/icons/department.svg'}
+                    height = {24}
+                    width= {24}
+                    alt = { 'icon'}
+                    className='ml-2'
+                />
+                <Input
+                  disabled
+                  value={patient?.allergies}
+                    className=' capitalize shad-input border-0'
+                />
+                  </div>
+            </div>
+          </div>
+          <div className="flex flex-col gap-6 xl:flex-row mt-4">
+            <div>
+              <label>Family medical history</label>
+              <div className='mt-2 flex rounded-md border-x-dark-500 bg-dark-400'>
+                      
+                <Image
+                    src= {'/assets/icons/calendar.svg'}
+                    height = {24}
+                    width= {24}
+                    alt = { 'icon'}
+                    className='ml-2'
+                />
+                <Input
+                  disabled
+                  value={patient?.familyMedicalHistory}
+                    className='shad-input border-0'
+                />
+                  </div>
+            </div>
+            <div>
+              <label>Past medical history</label>
+              <div className='mt-2 flex rounded-md border-x-dark-500 bg-dark-400'>
+                      
+                <Image
+                    src= {'/assets/icons/department.svg'}
+                    height = {24}
+                    width= {24}
+                    alt = { 'icon'}
+                    className='ml-2'
+                />
+                <Input
+                  disabled
+                  value={patient?.pastMedicalHistory}
                     className=' capitalize shad-input border-0'
                 />
                   </div>
             </div>
           </div>
           <Image
-            src={temporary.avatar}
+            src={patient.identificationDocument}
             height={128}
             width={128}
             alt="avatar"
             className="mt-3"
           />
           <div className="mt-6 flex gap-4 items-center justify-start">
-            <Button onClick={()=>handelAccept()} className="bg-green-500">
-              {
-                isLoading? (<Image
-                  src={'/assets/icons/loader.svg'}
-                  alt='loader'
-                  width={24}
-                  height={24}
-                  className='animate-spin'
-                />):(<span>Accept</span>)
-              }
+            <Button onClick={()=> router.back()} className="bg-green-500">
+              
+              <span>Back</span>
+              
             </Button>
-            <Button onClick={()=>{handelDenied()}} className="bg-red-500">
-            {
-                isLoadingDeny? (<Image
-                  src={'/assets/icons/loader.svg'}
-                  alt='loader'
-                  width={24}
-                  height={24}
-                  className='animate-spin'
-                />):(<span>Deny</span>)
-              }
-            </Button>
+            
           </div>
         </div>
   )
 }
 
-export default TemporaryForm
+export default PatientReview

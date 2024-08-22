@@ -23,7 +23,7 @@ public class AppointmentController : ControllerBase
             Status = appointmentRequest.Status,
             UserId = appointmentRequest.UserId,
             Reason = appointmentRequest.Reason,
-            Notes = appointmentRequest.Notes
+            Notes = appointmentRequest.Note
         };
         _context.Appointments.Add(appointment);
         var res = await _context.SaveChangesAsync();
@@ -43,7 +43,7 @@ public class AppointmentController : ControllerBase
         }
     }
     [HttpGet("{id}")]
-    public async Task<ActionResult<Appointment>> GetAppointmentByIdUser(int id)
+    public async Task<ActionResult<Appointment>> GetAppointmentById(int id)
     {
         var appointment = _context.Appointments.FirstOrDefault(x => x.Id == id);
         if (appointment == null)
@@ -87,6 +87,120 @@ public class AppointmentController : ControllerBase
         if (appointments == null || appointments.Count == 0)
         {
             return NotFound($"No appointments found for user with ID {userId}");
+        }
+
+        return Ok(appointments);
+    }
+    [HttpGet("all")]
+    public async Task<ActionResult<List<AnyType>>> GetAllAppointmentsByAdmin()
+    {
+        var appointments = await _context.Appointments
+                           .Join(
+                               _context.Patients,
+                               appointment => appointment.PatientId,
+                               patient => patient.Id,
+                               (appointment, patient) => new { appointment, patient }
+                           )
+                           .Join(
+                               _context.Doctors,
+                               ap => ap.appointment.primaryPhysicianId,
+                               doctor => doctor.id,
+                               (ap, doctor) => new
+                               {
+                                   name = ap.patient.Name,
+                                   status = ap.appointment.Status,
+                                   schedule = ap.appointment.Schedule,
+                                   doctor = doctor.name,
+                                   avatarDoctor = doctor.avatar,
+                                   patientId = ap.patient.Id,
+                                   appointmentId = ap.appointment.Id,
+
+
+                               }
+                           )
+                           .ToListAsync();
+        if (appointments == null || appointments.Count == 0)
+        {
+            return NotFound($"No appointments found ");
+        }
+
+        return Ok(appointments);
+    }
+    [HttpGet("all/doctor/{doctorId}")]
+    public async Task<ActionResult<List<AnyType>>> GetAllAppointmentsByDoctor(int doctorId)
+    {
+        var appointments = await _context.Appointments
+                            .Where(a => a.primaryPhysicianId == doctorId)
+                            .Join(
+                                _context.Patients,
+                               appointment => appointment.PatientId,
+                               patient => patient.Id,
+                               (appointment, patient) => new
+                               {
+                                   id = appointment.Id,
+                                   patientName = patient.Name,
+                                   status = appointment.Status,
+                                   schedule = appointment.Schedule,
+                                   patientId = patient.Id,
+                                   primaryPhysicianId = appointment.primaryPhysicianId,
+                                   reason = appointment.Reason,
+                                   notes = appointment.Notes,
+                                   userId = appointment.UserId,
+                               }
+
+                            ).ToListAsync();
+
+        if (appointments == null || appointments.Count == 0)
+        {
+            return NotFound($"No appointments found ");
+        }
+
+        return Ok(appointments);
+    }
+    [HttpGet("date/{doctorId}")]
+    public async Task<ActionResult<IEnumerable<Appointment>>> getAppointmentTodayByDoctor(int doctorId)
+    {
+        var today = DateTime.Today;
+        Console.WriteLine("Date: " + today);
+
+        var appointments = await _context.Appointments
+            .Where(a => a.primaryPhysicianId == doctorId && a.Schedule.Date == today && a.Status == "Pending")
+            .ToListAsync();
+        return Ok(appointments);
+    }
+
+    [HttpGet("status/{status}")]
+    public async Task<ActionResult<List<AnyType>>> GetAppointmentsByStatus(string status)
+    {
+        var appointments = await _context.Appointments
+                            .Where(a => a.Status == status)
+                              .Join(
+                                  _context.Patients,
+                                  appointment => appointment.PatientId,
+                                  patient => patient.Id,
+                                  (appointment, patient) => new { appointment, patient }
+                              )
+                              .Join(
+                                  _context.Doctors,
+                                  ap => ap.appointment.primaryPhysicianId,
+                                  doctor => doctor.id,
+                                  (ap, doctor) => new
+                                  {
+                                      name = ap.patient.Name,
+                                      status = ap.appointment.Status,
+                                      schedule = ap.appointment.Schedule,
+                                      doctor = doctor.name,
+                                      avatarDoctor = doctor.avatar,
+                                      patientId = ap.patient.Id,
+                                      appointmentId = ap.appointment.Id,
+
+
+                                  }
+                              )
+                              .ToListAsync();
+        if (appointments == null || appointments.Count == 0)
+        {
+            return NotFound($"No appointments found ");
         }
 
         return Ok(appointments);

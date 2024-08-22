@@ -6,9 +6,17 @@ import Link from 'next/link'
 import Cookies from 'js-cookie'
 import React, { use, useEffect, useState } from 'react'
 import { getUser } from '@/lib/actions/user.action'
+import { getAllDoctor } from '@/lib/actions/doctor.action'
 
 const Register =  ({params: {userId}} : SearchParamProps) => {
   const user =  getUser()
+  const [doctor, setDoctor] = useState()
+  useEffect(()=>{
+    const loadData = async ()=>{
+      setDoctor(await getAllDoctor())
+    }
+    loadData()
+  },[])
   
   return (
     <div className="flex h-screen max-h-screen">
@@ -22,7 +30,7 @@ const Register =  ({params: {userId}} : SearchParamProps) => {
             className="mb-12 h-10 w-fit"
             />
 
-            <RegisterForm user = {user}/>
+            <RegisterForm user = {user} doctor ={doctor}/>
               <p className="copyright py-12">
               © 2024 CarePulse
               </p>
