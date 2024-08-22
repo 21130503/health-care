@@ -23,6 +23,7 @@
     "@radix-ui/react-toast": "^1.2.1",
     "@tanstack/react-table": "^8.19.3",
     "axios": "^1.7.3",
+    "cheerio": "^1.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
@@ -42,6 +43,7 @@
     "react-phone-number-input": "^3.4.3",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
+    "typed.js": "^2.1.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

@@ -1,14 +1,19 @@
 
 import { StatCard } from '@/components/ui/StatCard';
-import { columns, Payment } from '@/components/ui/table/columns';
+import { columns, columnsAppointment, Payment } from '@/components/ui/table/columns';
 import  {DataTable} from '@/components/ui/table/DataTable';
-import { getRecentAppointmentList } from '@/lib/actions/appointment';
+import { getAllAppointmentByStatus, getAllAppointmentForAdmin, getAppointment, getRecentAppointmentList } from '@/lib/actions/appointment';
 import React, { useEffect, useState } from 'react'
 import { HeaderAdmin } from '@/components/headerAdmin';
 
 
 const AdminPage = async() => {
-    const appointments = await getRecentAppointmentList();
+    const appointments = await getAllAppointmentForAdmin();
+    const pendings = await getAllAppointmentByStatus("pending")
+    const cancelleds = await getAllAppointmentByStatus("cancelled")
+    const scheduleds = await getAllAppointmentByStatus("scheduled")
+    
+
   return (
     <div className="mx-auto flex max-w-7xl flex-col space-y-14">
       <HeaderAdmin/>
@@ -24,25 +29,25 @@ const AdminPage = async() => {
         <section className="admin-stat">
           <StatCard
             type="appointments"
-            count={appointments.scheduledCount}
+            count={scheduleds?.length || 0}
             label="Scheduled appointments"
             icon={"/assets/icons/appointments.svg"}
           />
           <StatCard
             type="pending"
-            count={appointments.pendingCount}
+            count={pendings.length}
             label="Pending appointments"
             icon={"/assets/icons/pending.svg"}
           />
           <StatCard
             type="cancelled"
-            count={appointments.cancelledCount}
+            count={cancelleds.length}
             label="Cancelled appointments"
             icon={"/assets/icons/cancelled.svg"}
           />
         </section>
 
-        <DataTable columns={columns} data={appointments.documents} />
+        <DataTable columns={columnsAppointment} data={appointments} />
       </main>
     </div>
   )

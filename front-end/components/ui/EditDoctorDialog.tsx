@@ -87,6 +87,10 @@ const EditDoctorDialog =  ({doctor}: EditDoctorDialog) => {
             });
         }
         const doctorEdit = await updateDoctor(formData);
+        if(doctorEdit){
+          router.push('/doctor/success')
+          
+        }
         
       }
   return (

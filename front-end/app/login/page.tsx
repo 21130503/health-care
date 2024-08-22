@@ -30,6 +30,7 @@ export default function Login({searchParams}: SearchParamProps) {
                 © 2024 CarePulse
                 </p>
                 <div>
+                  <Link className="text-green-500 mr-5" href={"/register"}>Register</Link>
                   <Link className="text-green-500 mr-5" href={"/login?doctor=true"}>Doctor</Link>
                   <Link className="text-green-500" href={"/login?admin=true"}>Admin</Link>
                 </div>

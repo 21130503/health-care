@@ -58,6 +58,17 @@ export interface Appointment extends Models.Document {
   userId: string;
   cancellationReason: string | null;
 }
+export interface AppointmentDotNet extends Models.Document {
+  patientId: number;
+  patientName: string;
+  schedule: Date;
+  status: Status;
+  reason: string;
+  note: string;
+  userId: string;
+  primaryPhysicianId: number;
+  id: number;
+}
 export interface AppointmentForDataTable extends Models.Document {
   patient: string,
   status: Status,

@@ -162,6 +162,62 @@ export const getAllAppointmentByUser = async (idUser: string)=>{
   }
 
 }
+export const getAllAppointmentByStatus = async (status: string)=>{
+  try{
+    const response = await axios.get(`http://localhost:5228/appointment/status/${status}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    return response.data;
+  }
+  catch(error){
+    console.log("Error: ", error);
+  }
+
+}
+export const getAllAppointmentForAdmin = async ()=>{
+  try{
+    const response = await axios.get(`http://localhost:5228/appointment/all/`, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    return response.data;
+  }
+  catch(error){
+    console.log("Error: ", error);
+  }
+
+}
+export const getAllAppointmentForDoctor = async (doctorId: string)=>{
+  try{
+    const response = await axios.get(`http://localhost:5228/appointment/all/doctor/${doctorId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    return response.data;
+  }
+  catch(error){
+    console.log("Error: ", error);
+  }
+
+}
+export const getAllAppointmentTodayForDoctor = async (doctorId: string)=>{
+  try{
+    const response = await axios.get(`http://localhost:5228/appointment/date/${doctorId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    return response.data;
+  }
+  catch(error){
+    console.log("Error: ", error);
+  }
+
+}
 // Cancel
 export const cancelAppointment = async (appointment: CancelAppointmentParams)=>{
   try {
